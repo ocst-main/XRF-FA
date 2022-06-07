@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data;
-using System.Data.OleDb;
-using System.Windows.Forms;
-using System.Threading;
 using System.ComponentModel;
+using System.Data;
+using System.Data.SQLite;
 using System.IO;
-
-using Innoit.FrameWork.DataBase;
+using System.Text;
+//using System.Data.OleDb;
+using System.Windows.Forms;
 
 namespace XRF_FA
 {
@@ -119,7 +116,7 @@ namespace XRF_FA
         /// <param name="sData"></param>
         /// <param name="iFlag"></param>
         /// <returns></returns>
-        public OleDbDataReader Execute_BackGroundWorker(string[] sData, int iFlag)
+        public SQLiteDataReader Execute_BackGroundWorker(string[] sData, int iFlag)
         {
             switch (iFlag)
             {
@@ -149,27 +146,27 @@ namespace XRF_FA
                     bgW.RunWorkerCompleted += new RunWorkerCompletedEventHandler(ins_TB_TEST_RESULT_RunWorkerCompleted);
                     break;
                 case 7:
-                    bgW.DoWork += new DoWorkEventHandler(GetSampleLength); 
+                    bgW.DoWork += new DoWorkEventHandler(GetSampleLength);
                     bgW.RunWorkerAsync(sData);
                     bgW.RunWorkerCompleted += new RunWorkerCompletedEventHandler(GetSampleLength_RunWorkerCompleted);
                     break;
-                    
+
 
             }
             return null;
 
         }
 
-        
+
 
         private bool Found_TB_XRF_SEQ(string smplNO, string tmbDiv)
         {
-            OleDbCommand command = null;
+            SQLiteCommand command = null;
             object obj = null;
             bool bReturn = false;
             string sSql = string.Empty;
 
-            OleDbConnection dbCon = new OleDbConnection(OraDataHelper.gConnString);
+            SQLiteConnection dbCon = SQLiteConnect.Instance.SQLiteCnn;
 
             sSql = string.Format("SELECT SMPLNO FROM TB_XRF_SEQ WHERE SMPLNO = '{0}' AND TMBDIV = '{1}'", smplNO, tmbDiv);
             try
@@ -220,10 +217,10 @@ namespace XRF_FA
             string sSmplNo = s[0].Trim();
             string sTmb = s[1].Trim();
 
-            OleDbCommand command = null;
+            SQLiteCommand command = null;
             object oLen = null;
             string Sql = string.Empty;
-            OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
+            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
 
             try
             {
@@ -268,12 +265,12 @@ namespace XRF_FA
         /// <summary>
         /// 시험지시(TB_XRF_SEQ) Table Data를 읽는다.
         /// </summary>
-        /// <returns>OleDbDataReader</returns>
-        public static OleDbDataReader GetOrderList(OleDbConnection dbConn)
+        /// <returns>SQLiteDataReader</returns>
+        public static SQLiteDataReader GetOrderList(SQLiteConnection dbConn)
         {
 
-            OleDbCommand command = null;
-            OleDbDataReader reader = null;
+            SQLiteCommand command = null;
+            SQLiteDataReader reader = null;
 
             try
             {
@@ -287,7 +284,7 @@ namespace XRF_FA
                     dbConn.Open();
 
                 reader = command.ExecuteReader();
-                
+
             }
             catch (Exception ex)
             {
@@ -307,12 +304,12 @@ namespace XRF_FA
         /// <summary>
         /// 시험방법을 읽는다.
         /// </summary>
-        /// <returns>OleDbDataReader</returns>
-        public static DataTable GetDivTypeList(OleDbConnection dbConn)
+        /// <returns>SQLiteDataReader</returns>
+        public static DataTable GetDivTypeList(SQLiteConnection dbConn)
         {
             DataTable dtDivType = new DataTable();
-            OleDbCommand command = null;
-            OleDbDataReader reader = null;
+            SQLiteCommand command = null;
+            SQLiteDataReader reader = null;
 
             try
             {
@@ -354,7 +351,7 @@ namespace XRF_FA
 
         private void upt_TB_XRF_SEQ(object sender, DoWorkEventArgs e)
         {
-            OleDbCommand command = null;
+            SQLiteCommand command = null;
             int iReturn = 0;
             string sSql = string.Empty;
 
@@ -365,7 +362,7 @@ namespace XRF_FA
             string sRECHK = s[2];
             string sFlag = s[3];
 
-            OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
+            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
 
             try
             {
@@ -427,8 +424,8 @@ namespace XRF_FA
             string sProcDiv = s[5];
             string sProc = s[6];
             string sDate = s[7];
-    
-            OleDbCommand command = null;
+
+            SQLiteCommand command = null;
             int iReturn = 0;
             string sSql = string.Empty;
             if (sLength.Length == 0)
@@ -436,7 +433,7 @@ namespace XRF_FA
                 sLength = "0";
             }
 
-            OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
+            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
 
             if (!Found_TB_XRF_FA_DIRECT(sSmplNo, sTmbDiv, sCarve))
             {
@@ -480,9 +477,9 @@ namespace XRF_FA
             string sProc = s[4];
             string sDate = s[5];
 
-            OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
+            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
 
-            OleDbCommand command = null;
+            SQLiteCommand command = null;
             int iReturn = 0;
             string sComSql = string.Empty;
             try
@@ -567,9 +564,9 @@ namespace XRF_FA
             string Cr = s[6];
             string P = s[7];
 
-            OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
+            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
 
-            OleDbCommand command = null;
+            SQLiteCommand command = null;
             int iReturn = 0;
             string sSql = string.Empty;
 
@@ -653,9 +650,9 @@ namespace XRF_FA
             string sDate = s[8];
 
 
-            OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
+            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
 
-            OleDbCommand command = null;
+            SQLiteCommand command = null;
             int iReturn = 0;
             string sSql = string.Empty;
 
@@ -736,9 +733,9 @@ namespace XRF_FA
         /// <param name="sTmb"></param>
         /// <param name="tblName"></param>
         /// <returns></returns>
-        public static string GetProgramName(OleDbConnection dbConn, string sSmplNo, string sTmb, string tblName)
+        public static string GetProgramName(SQLiteConnection dbConn, string sSmplNo, string sTmb, string tblName)
         {
-            OleDbCommand command = null;
+            SQLiteCommand command = null;
             string sReturn = string.Empty;
             object obj = null;
 
@@ -777,8 +774,8 @@ namespace XRF_FA
 
             return sReturn;
         }
-        
-        
+
+
 
         /// <summary>
         /// 수동등록된 작업지시를 임시테이블에 등록한다.
@@ -791,9 +788,9 @@ namespace XRF_FA
         /// <param name="sExName"></param>
         /// <returns></returns>
         /// 
-        private static bool search_TB_XRF_SEQ_TEMP(OleDbConnection dbConn, string sSmplNo, string sTmb)
+        private static bool search_TB_XRF_SEQ_TEMP(SQLiteConnection dbConn, string sSmplNo, string sTmb)
         {
-            OleDbCommand command = null;
+            SQLiteCommand command = null;
             bool iReturn = false;
             string sSql = string.Empty;
             object obj = null;
@@ -801,7 +798,7 @@ namespace XRF_FA
             try
             {
                 sSql = string.Format("SELECT SMPLNO FROM TB_XRF_SEQ_TEMP " +
-                                         "WHERE SMPLNO = '{0}' AND TMBDIV = '{1}'", sSmplNo, sTmb) ;
+                                         "WHERE SMPLNO = '{0}' AND TMBDIV = '{1}'", sSmplNo, sTmb);
                 command = dbConn.CreateCommand();
 
                 if (dbConn.State == ConnectionState.Closed)
@@ -819,10 +816,11 @@ namespace XRF_FA
             }
             finally
             {
-                if(obj == null)
+                if (obj == null)
                 {
                     iReturn = false;
-                } else 
+                }
+                else
                 {
                     iReturn = true;
                 }
@@ -837,9 +835,9 @@ namespace XRF_FA
             return iReturn;
         }
 
-        public static int insert_TB_XRF_SEQ_TEMP(OleDbConnection dbConn, string sSmplNo, string sTmb, string sSUJI, string sLength, string sExName)
+        public static int insert_TB_XRF_SEQ_TEMP(SQLiteConnection dbConn, string sSmplNo, string sTmb, string sSUJI, string sLength, string sExName)
         {
-            OleDbCommand command = null;
+            SQLiteCommand command = null;
             int iReturn = 0;
             string sSql = string.Empty;
 
@@ -882,14 +880,14 @@ namespace XRF_FA
 
             return iReturn;
         }
-        
+
         private bool Found_TB_XRF_FA_DIRECT(string sSmplNo, string sTmbDiv, string sCarve)
         {
-            OleDbCommand command = null;
+            SQLiteCommand command = null;
             bool bReturn = true;
             object iCount = null;
 
-            OleDbConnection dbCon = new OleDbConnection(OraDataHelper.gConnString);
+            SQLiteConnection dbCon = SQLiteConnect.Instance.SQLiteCnn;
             try
             {
 
@@ -935,9 +933,9 @@ namespace XRF_FA
 
             if (!Found_TB_TEST_DIRECT(sSmplNo, sTmbDiv)) return;
 
-            OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
+            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
 
-            OleDbCommand command = null;
+            SQLiteCommand command = null;
             int iReturn = 0;
             string sComSql = string.Empty;
 
@@ -970,12 +968,12 @@ namespace XRF_FA
 
         private bool Found_TB_TEST_DIRECT(string smplNO, string tmbDiv)
         {
-            OleDbCommand command = null;
+            SQLiteCommand command = null;
             object obj = null;
             bool bReturn = false;
             string sSql = string.Empty;
 
-            OleDbConnection dbCon = new OleDbConnection(OraDataHelper.gConnString);
+            SQLiteConnection dbCon = SQLiteConnect.Instance.SQLiteCnn;
 
             sSql = string.Format("SELECT SMPLNO FROM TB_TEST_DIRECT WHERE SMPLNO = '{0}' AND TMBDIV = '{1}'", smplNO, tmbDiv);
             try
@@ -1014,7 +1012,7 @@ namespace XRF_FA
             return bReturn;
         }
 
-        
+
 
 
         private void WriteLogData(string sData, string sFLAG)
@@ -1041,49 +1039,49 @@ namespace XRF_FA
         #region [ bool - 시편변호에 맞는 검량선(프로그램)명 있는지 반환(CheckAppName) ]
         public static bool CheckAppName(string[] sParams)
         {
-            OleDbCommand command = null;
-            OleDbDataReader reader = null;
+            SQLiteCommand command = null;
+            SQLiteDataReader reader = null;
 
             try
             {
-                OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
+                SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
                 command = dbConn.CreateCommand();
                 string sql = string.Format(
                 " SELECT DIRECTR.APPNAME                                                                                    "
-                +"   FROM(                                                                                                   "
-                +"     SELECT APP.APPNAME                                                                                    "
-                +"           , APP.SHTSPEC                                                                                   "
-                +"       FROM TB_TEST_DIRECT DIR                                                                             "
-                +"           , TB_XRF_APPLICATION_NAME APP                                                                   "
-                +"      WHERE DIR.LINENAME = APP.LINENAME(+)                                                                 "
-                +"        AND DIR.COILNAME = APP.COILNAME(+)                                                                 "
-                +"        AND DIR.AFTCODE = APP.AFTCODE(+)                                                                   "
+                + "   FROM(                                                                                                   "
+                + "     SELECT APP.APPNAME                                                                                    "
+                + "           , APP.SHTSPEC                                                                                   "
+                + "       FROM TB_TEST_DIRECT DIR                                                                             "
+                + "           , TB_XRF_APPLICATION_NAME APP                                                                   "
+                + "      WHERE DIR.LINENAME = APP.LINENAME(+)                                                                 "
+                + "        AND DIR.COILNAME = APP.COILNAME(+)                                                                 "
+                + "        AND DIR.AFTCODE = APP.AFTCODE(+)                                                                   "
                 + "        AND SMPLNO = '{0}'                                                                                     "
                 + "        AND TMBDIV = '{1}'                                                                                     "
-                +"                                                                                                           "
-                +"        ) DIRECTR                                                                                          "
-                +"   WHERE DIRECTR.SHTSPEC = (                                                                               "
-                 +"                                    SELECT NVL(XA.SHTSPEC, '--') SHTSPEC            "
-                 +"                                       FROM (SELECT XAN.FACTORY                     "
-                 +"                                                   ,XAN.LINENAME                    "
-                 +"                                                   ,XAN.COILNAME                    "
-                 +"                                                   ,CD.CODENAME SHTSPEC             "
-                 +"                                                   ,XAN.AFTCODE                     "
-                 +"                                                   ,XAN.APPNAME                     "
-                 +"                                                   ,XAN.DEFAULTCHECK                "
-                 +"                                               FROM TB_XRF_APPLICATION_NAME XAN     "
-                 +"                                                   ,TB_CODE CD                      "
-                 +"                                               WHERE XAN.SHTSPEC  = CD.CODEVALUE(+) "
-                 +"                                                 AND CD.CODEID = '11400') XA        "
-                 +"                                           ,TB_TEST_DIRECT TD                       "
-                 +"                                     WHERE XA.linename(+) = TD.LINENAME             "
-                 +"                                       AND XA.coilname(+) = TD.coilname             "
-                 +"                                       AND XA.aftcode(+) = TD.aftcode               "
-                 +"                                       AND XA.shtspec(+) = TD.shtspec               "
-                 +"                                       AND TD.SMPLNO = '{2}'                            "
-                 +"                                       AND TD.TMBDIV = '{3}'                            "
-                +"                         )                                                                                 "
-                +"     AND DIRECTR.APPNAME = '{4}'                                                                               "
+                + "                                                                                                           "
+                + "        ) DIRECTR                                                                                          "
+                + "   WHERE DIRECTR.SHTSPEC = (                                                                               "
+                 + "                                    SELECT NVL(XA.SHTSPEC, '--') SHTSPEC            "
+                 + "                                       FROM (SELECT XAN.FACTORY                     "
+                 + "                                                   ,XAN.LINENAME                    "
+                 + "                                                   ,XAN.COILNAME                    "
+                 + "                                                   ,CD.CODENAME SHTSPEC             "
+                 + "                                                   ,XAN.AFTCODE                     "
+                 + "                                                   ,XAN.APPNAME                     "
+                 + "                                                   ,XAN.DEFAULTCHECK                "
+                 + "                                               FROM TB_XRF_APPLICATION_NAME XAN     "
+                 + "                                                   ,TB_CODE CD                      "
+                 + "                                               WHERE XAN.SHTSPEC  = CD.CODEVALUE(+) "
+                 + "                                                 AND CD.CODEID = '11400') XA        "
+                 + "                                           ,TB_TEST_DIRECT TD                       "
+                 + "                                     WHERE XA.linename(+) = TD.LINENAME             "
+                 + "                                       AND XA.coilname(+) = TD.coilname             "
+                 + "                                       AND XA.aftcode(+) = TD.aftcode               "
+                 + "                                       AND XA.shtspec(+) = TD.shtspec               "
+                 + "                                       AND TD.SMPLNO = '{2}'                            "
+                 + "                                       AND TD.TMBDIV = '{3}'                            "
+                + "                         )                                                                                 "
+                + "     AND DIRECTR.APPNAME = '{4}'                                                                               "
                 , sParams[0] //SMPLNO
                 , sParams[1] //TMBDIV
                 , sParams[0] //SMPLNO
@@ -1136,8 +1134,8 @@ namespace XRF_FA
         #region [ 검량선(프로그램)명 변경(UpdateAppName) ]
         public static void UpdateAppName(string[] sParams)
         {
-            OleDbCommand command = null;
-            OleDbDataReader reader = null;
+            SQLiteCommand command = null;
+            SQLiteDataReader reader = null;
             string sql = string.Format(
                 "UPDATE TB_XRF_SEQ "
                 + " SET EXNAME = '{0}' "
@@ -1150,9 +1148,9 @@ namespace XRF_FA
 
             try
             {
-                OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
+                SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
                 command = dbConn.CreateCommand();
-                
+
                 command.CommandText = sql;
 
 
@@ -1172,11 +1170,11 @@ namespace XRF_FA
         }
         #endregion
         #region [ DataTable - 검량선(프로그램)명 전체 가져온다(GetAppName) ]
-        public static DataTable GetAppName(OleDbConnection dbConn)
+        public static DataTable GetAppName(SQLiteConnection dbConn)
         {
             DataTable dtAppName = new DataTable();
-            OleDbCommand command = null;
-            OleDbDataReader reader = null;
+            SQLiteCommand command = null;
+            SQLiteDataReader reader = null;
 
             try
             {
@@ -1217,53 +1215,53 @@ namespace XRF_FA
         #region [ DataTable - XRF Application Element 정보 조회(GetXRFApplicationElement) ]
         public static DataTable GetXRFApplicationElement(string[] sParams)
         {
-            OleDbCommand command = null;
-            OleDbDataReader reader = null;
+            SQLiteCommand command = null;
+            SQLiteDataReader reader = null;
             DataTable dtTemp = new DataTable();
             try
             {
-                OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
+                SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
                 command = dbConn.CreateCommand();
                 string sql = string.Format(
                 "SELECT DIRECTR.LINENAME"
-                +"      ,DIRECTR.COILNAME"
-                +"      ,DIRECTR.SHTSPEC"
-                +"      ,DIRECTR.AFTCODE"
-                +"      ,DIRECTR.ELEMENT"
-                +"      ,DIRECTR.COMPUTEMODIFY                                                                         "
-                +"      ,DIRECTR.COLNAME                                                                               "
-                +"      ,DIRECTR.APPNAME                                                                               "
-                +" FROM(                                                                                               "
-                +"      SELECT '3000'                                                                                  "
-                +"            , DIRECT.LINENAME                                                                        "
-                +"            , DIRECT.COILNAME                                                                        "
-                +"            , APP.SHTSPEC                                                                            "
-                +"            , DIRECT.AFTCODE                                                                         "
-                +"            , APP.ELEMENT                                                                            "
-                +"            , APP.APPNAME                                                                            "
-                +"            , APP.COMPUTEMODIFY                                                                      "
-                +"            , APP.COLNAME                                                                            "
-                +"        FROM TB_TEST_DIRECT DIRECT                                                                   "
-                +"            , TB_XRF_APPLICATION_ELEMENT APP                                                         "
-                +"       WHERE DIRECT.LINENAME = APP.LINENAME(+)                                                       "
-                +"         AND DIRECT.COILNAME = APP.COILNAME(+)                                                       "
-                +"         AND DIRECT.AFTCODE = APP.AFTCODE(+)                                                         "
-                +"         AND SMPLNO = '{0}'                                                                        "
-                +"         AND TMBDIV = '{1}'                                                                        "
+                + "      ,DIRECTR.COILNAME"
+                + "      ,DIRECTR.SHTSPEC"
+                + "      ,DIRECTR.AFTCODE"
+                + "      ,DIRECTR.ELEMENT"
+                + "      ,DIRECTR.COMPUTEMODIFY                                                                         "
+                + "      ,DIRECTR.COLNAME                                                                               "
+                + "      ,DIRECTR.APPNAME                                                                               "
+                + " FROM(                                                                                               "
+                + "      SELECT '3000'                                                                                  "
+                + "            , DIRECT.LINENAME                                                                        "
+                + "            , DIRECT.COILNAME                                                                        "
+                + "            , APP.SHTSPEC                                                                            "
+                + "            , DIRECT.AFTCODE                                                                         "
+                + "            , APP.ELEMENT                                                                            "
+                + "            , APP.APPNAME                                                                            "
+                + "            , APP.COMPUTEMODIFY                                                                      "
+                + "            , APP.COLNAME                                                                            "
+                + "        FROM TB_TEST_DIRECT DIRECT                                                                   "
+                + "            , TB_XRF_APPLICATION_ELEMENT APP                                                         "
+                + "       WHERE DIRECT.LINENAME = APP.LINENAME(+)                                                       "
+                + "         AND DIRECT.COILNAME = APP.COILNAME(+)                                                       "
+                + "         AND DIRECT.AFTCODE = APP.AFTCODE(+)                                                         "
+                + "         AND SMPLNO = '{0}'                                                                        "
+                + "         AND TMBDIV = '{1}'                                                                        "
                 + "         AND APP.APPNAME = '{2}'                                                                        "
-                +"                                                                                                     "
-                +"         ) DIRECTR                                                                                   "
-                +" WHERE DIRECTR.SHTSPEC = (                                                                           "
-                +"                            SELECT NVL(XA.SHTSPEC, '--') SHTSPEC             "
-                +"                               FROM (SELECT XAN.FACTORY                      "
-                +"                                           ,XAN.LINENAME                     "
-                +"                                           ,XAN.COILNAME                     "
-                +"                                           ,CD.CODENAME SHTSPEC             "
-                +"                                           ,XAN.AFTCODE                     "
-                +"                                             ,XAN.APPNAME                   "  
-                +"                                             ,XAN.DEFAULTCHECK              "  
-                +"                                         FROM TB_XRF_APPLICATION_NAME XAN   "  
-                +"                                             ,TB_CODE CD                    "
+                + "                                                                                                     "
+                + "         ) DIRECTR                                                                                   "
+                + " WHERE DIRECTR.SHTSPEC = (                                                                           "
+                + "                            SELECT NVL(XA.SHTSPEC, '--') SHTSPEC             "
+                + "                               FROM (SELECT XAN.FACTORY                      "
+                + "                                           ,XAN.LINENAME                     "
+                + "                                           ,XAN.COILNAME                     "
+                + "                                           ,CD.CODENAME SHTSPEC             "
+                + "                                           ,XAN.AFTCODE                     "
+                + "                                             ,XAN.APPNAME                   "
+                + "                                             ,XAN.DEFAULTCHECK              "
+                + "                                         FROM TB_XRF_APPLICATION_NAME XAN   "
+                + "                                             ,TB_CODE CD                    "
                 + "                                         WHERE XAN.SHTSPEC  = CD.CODEVALUE(+)"
                 + "                                           AND CD.CODEID = '11400') XA       "
                 + "                                     ,TB_TEST_DIRECT TD                      "
@@ -1272,8 +1270,8 @@ namespace XRF_FA
                 + "                                 AND XA.aftcode(+) = TD.aftcode              "
                 + "                                 AND XA.shtspec(+) = TD.shtspec              "
                 + "                                 AND TD.SMPLNO = '{3}'                           "
-                + "                                 AND TD.TMBDIV = '{4}'                           " 
-                +"                         )                                                           "
+                + "                                 AND TD.TMBDIV = '{4}'                           "
+                + "                         )                                                           "
                 , sParams[0] //SMPLNO
                 , sParams[1] //TMBDIV
                 , sParams[2] //APPNAME
@@ -1342,12 +1340,12 @@ namespace XRF_FA
         #region [ DataTable - XRF Application Detail 정보 조회() ]
         public static DataTable GetXRFApplicationDetail(string[] sParams)
         {
-            OleDbCommand command = null;
-            OleDbDataReader reader = null;
+            SQLiteCommand command = null;
+            SQLiteDataReader reader = null;
             DataTable dtTemp = new DataTable();
             try
             {
-                OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
+                SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
                 command = dbConn.CreateCommand();
                 string sql = string.Format(
                 "   SELECT *                          "
@@ -1440,11 +1438,11 @@ namespace XRF_FA
                     bgW.RunWorkerAsync(dtTemp);
                     bgW.RunWorkerCompleted += new RunWorkerCompletedEventHandler(upt_TB_XRF_SEQ_RunWorkerCompleted);
                     break;
-                //case "End":
-                //    bgW.DoWork += new DoWorkEventHandler(UpdateXRFSEQ);
-                //    bgW.RunWorkerAsync(dtTemp);
-                //    bgW.RunWorkerCompleted += new RunWorkerCompletedEventHandler(upt_TB_XRF_SEQ_RunWorkerCompleted);
-                //    break;
+                    //case "End":
+                    //    bgW.DoWork += new DoWorkEventHandler(UpdateXRFSEQ);
+                    //    bgW.RunWorkerAsync(dtTemp);
+                    //    bgW.RunWorkerCompleted += new RunWorkerCompletedEventHandler(upt_TB_XRF_SEQ_RunWorkerCompleted);
+                    //    break;
 
             }
         }
@@ -1452,15 +1450,15 @@ namespace XRF_FA
         #region [ 히스토리 저장(InsertHistory) ]
         private void InsertHistory(object sender, DoWorkEventArgs e)
         {
-            
+
             DataTable dtElement = (DataTable)e.Argument;
             string SQL = string.Empty;
-            OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
+            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
 
-            OleDbCommand command = null;
+            SQLiteCommand command = null;
             #region [ 히스토리 저장 ]
             ////////////// 히스토리 저장 /////////////////////////////////////////////////////////////
-            for(int iRow = 0; iRow<dtElement.Rows.Count; iRow++)
+            for (int iRow = 0; iRow < dtElement.Rows.Count; iRow++)
             {
                 DataRow drTemp = dtElement.Rows[iRow];
                 //if (!string.IsNullOrEmpty(drTemp["ELEMENTVALUE"].ToString()))//변경된값이 있다면 담는다
@@ -1527,7 +1525,7 @@ namespace XRF_FA
                 if (!string.IsNullOrEmpty(drTemp["ELEMENTVALUE"].ToString()))//변경된값이 있다면 담는다
                     strFront += " " + drTemp["COLNAME"] + drTemp["FRONTBACK"] + drTemp["WCD"] + " = " + drTemp["ELEMENTVALUE"] + " ,";
 
-                
+
             }
             SQL = strFront.Remove(strFront.Length - 1, 1) + strEnd;
 
@@ -1613,7 +1611,7 @@ namespace XRF_FA
                             strSqlAvg = strSqlAvg.Remove(strSqlAvg.Length - 1, 1)
                             + ") / " + iCount + strEnd;
                             ;
-                            
+
                             try
                             {
                                 //string strValue = "Common히스토리 원소 테이블 로우 갯수 : " + dtElement.Rows.Count;
@@ -1627,8 +1625,8 @@ namespace XRF_FA
                                 //평균처리
                                 command.CommandText = strSqlAvg;
                                 command.ExecuteNonQuery();
-                                
-                                
+
+
 
                             }
                             catch (Exception ex)
@@ -1671,7 +1669,7 @@ namespace XRF_FA
 
                                     command.CommandText = strAmt;
                                     command.ExecuteNonQuery();
-                                    
+
 
 
 
@@ -1690,7 +1688,7 @@ namespace XRF_FA
                                     command = null;
                                 }
                             }
-                            
+
                         }
                     }
                 }
@@ -1731,12 +1729,12 @@ namespace XRF_FA
             //string Cr = s[6];
             //string P = s[7];
 
-            
+
             //int iReturn = 0;
 
-            //OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
+            //SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
 
-            //OleDbCommand command = null;
+            //SQLiteCommand command = null;
             //string sSql = string.Empty;
 
             //if (wcd == "W" && fb == "F")
@@ -1807,9 +1805,9 @@ namespace XRF_FA
         public DataTable SelectXrfValue(DataTable dtElement)
         {
             List<string> list = new List<string>();
-            OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
-            OleDbCommand command = null;
-            OleDbDataReader reader = null;
+            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+            SQLiteCommand command = null;
+            SQLiteDataReader reader = null;
             DataTable dtTemp = new DataTable();
             StringBuilder strSql = new StringBuilder();
             DataTable dt = null;
@@ -1936,9 +1934,9 @@ namespace XRF_FA
             //string sDate = s[8];
 
 
-            OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
+            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
 
-            OleDbCommand command = null;
+            SQLiteCommand command = null;
             int iReturn = 0;
             string sSql = string.Empty;
 
@@ -2013,7 +2011,7 @@ namespace XRF_FA
         //#region [ 결과 저장() ]
         //private void UpdateXRFSEQ(object sender, DoWorkEventArgs e)
         //{
-        //    OleDbCommand command = null;
+        //    SQLiteCommand command = null;
         //    int iReturn = 0;
         //    string sSql = string.Empty;
 
@@ -2024,7 +2022,7 @@ namespace XRF_FA
         //    string sRECHK = s[2];
         //    string sFlag = s[3];
 
-        //    OleDbConnection dbConn = new OleDbConnection(OraDataHelper.gConnString);
+        //    SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
 
         //    try
         //    {
@@ -2077,7 +2075,7 @@ namespace XRF_FA
         {
             try
             {
-                string sFilePath = sLogPath + DateTime.Now.ToString("yyyyMMdd_DB")+ "Temp" + ".log";
+                string sFilePath = sLogPath + DateTime.Now.ToString("yyyyMMdd_DB") + "Temp" + ".log";
                 TextWriter tw = null;
 
                 if (!Directory.Exists(sLogPath))

@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="yes"?>
+<DocumentElement>
+  <ORDERLIST>
+    <SEQ>1</SEQ>
+    <시편번호>12</시편번호>
+    <TMB>T</TMB>
+    <길이>1,234</길이>
+    <취소>false</취소>
+    <세척유무>false</세척유무>
+    <DivType>WCD</DivType>
+    <시험기>X1</시험기>
+    <Application>CGL_GG_ZF</Application>
+  </ORDERLIST>
+</DocumentElement>
