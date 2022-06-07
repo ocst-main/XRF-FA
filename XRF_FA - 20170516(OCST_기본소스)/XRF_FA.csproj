@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A457471A-419D-4CF0-AC33-C48B3FDC7D5F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>XRF_FA</RootNamespace>
+    <AssemblyName>XRF_FA</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>XRF_FA.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="C1.Win.C1FlexGrid.2, Version=2.6.20122.701, Culture=neutral, PublicKeyToken=79882d576c6336da, processorArchitecture=MSIL" />
+    <Reference Include="C1.Win.C1Input.2, Version=2.0.20122.33281, Culture=neutral, PublicKeyToken=7e7ff60f0c214f9a, processorArchitecture=MSIL" />
+    <Reference Include="C1.Win.C1Win7Pack.2, Version=2.0.20122.19, Culture=neutral, PublicKeyToken=79882d576c6336da, processorArchitecture=MSIL" />
+    <Reference Include="Innoit.FrameWork.AsyncSocket">
+      <HintPath>refDll\Innoit.FrameWork.AsyncSocket.dll</HintPath>
+    </Reference>
+    <Reference Include="Innoit.FrameWork.Common.Customizing">
+      <HintPath>refDll\Innoit.FrameWork.Common.Customizing.dll</HintPath>
+    </Reference>
+    <Reference Include="Innoit.FrameWork.Communication">
+      <HintPath>refDll\Innoit.FrameWork.Communication.dll</HintPath>
+    </Reference>
+    <Reference Include="Innoit.FrameWork.DataBase">
+      <HintPath>refDll\Innoit.FrameWork.DataBase.dll</HintPath>
+    </Reference>
+    <Reference Include="InoCompute, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>refDll\InoCompute.dll</HintPath>
+    </Reference>
+    <Reference Include="opcNet.IF.SEM">
+      <HintPath>..\..\..\..\..\Program Files\OPCsoft\OPCCltNetIF\opcNet.IF.SEM.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="appMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="appMain.Designer.cs">
+      <DependentUpon>appMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CommonDataBase.cs" />
+    <Compile Include="OPCFunction.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PLCDefine.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SignalInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SignalInputForm.Designer.cs">
+      <DependentUpon>SignalInputForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SocketClient.cs" />
+    <Compile Include="Sql.cs" />
+    <Compile Include="TestResult.cs" />
+    <Compile Include="XrfControl.cs" />
+    <EmbeddedResource Include="AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="appMain.resx">
+      <DependentUpon>appMain.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="SignalInputForm.resx">
+      <DependentUpon>SignalInputForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SignalBlue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SignalGreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SignalRed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SignalYellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SignalEmpth.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\ABB_Enable_F.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\ABB_Enable_T.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PerfCenterCpl.ico" />
+    <Content Include="Resources\exit.jpg" />
+    <Content Include="Resources\LogFile.ico" />
+    <Content Include="Resources\robot.ico" />
+    <None Include="Resources\VISION406310.gif" />
+    <Content Include="Resources\SignalGreen2.png" />
+    <Content Include="Resources\SignalRed2.png" />
+    <Content Include="Resources\SignalRed3.png" />
+    <Content Include="XRF_FA.ico" />
+    <None Include="Resources\XRF_FA.bmp" />
+    <Content Include="Resources\XRF_FA.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
