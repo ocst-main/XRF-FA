@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<opc-profile>
+	<define-group>
+		<group name="XRF_GROUP01" type="DATA" rate="500" active="1" readsource="2" operType="dynamic" description="OPC Group">
+			<tag name="%DW0000" type="DIGITAL" description="long type tag"/>
+		</group>
+	</define-group>
+	<link-group>
+	</link-group>
+
+</opc-profile>
