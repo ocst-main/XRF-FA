@@ -1,0 +1,15 @@
+<opc-profile>
+	<configure-server>
+		<options pingEnable="0" pingTimeout="1000" evCheckType="datachange" evCheckTime="" useOnlineLocalCtrl="0"/>
+	</configure-server>
+	<!-- DONT'S MODIFY GROUP NAME BECAUSE OF SYSTEM GROUP. OPCServer-EPQ Comm Status. -->
+	<define-system-group>
+		<!-- 	
+		<group name="XRF_GROUP01" evValue="0" rate="100" active="1" decisionType="1" readsource="2" invokeDelay="5">
+			<tag role="checkChange" name="_bDeviceError" type="digital" active="1" validType="3" validVal01="-1" validVal02="" invalid=""/>
+		</group>
+		-->
+	</define-system-group>
+	<define-group>
+	</define-group>
+</opc-profile>
