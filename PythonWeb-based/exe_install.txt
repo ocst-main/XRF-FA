@@ -1,5 +1,0 @@
-pip install virtualenv
-virtualenv mypython
-mypython\Scripts\activate.bat
-pip install pyinstaller
-pyinstaller --onefile --clean -w --icon=folder.ico FileBrowser.py
