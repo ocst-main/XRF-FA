@@ -2,35 +2,31 @@
 using IniParser.Model;
 using System;
 using System.Data;
-using System.Data.SQLite;
-using System.IO;
-using System.Linq;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace XRF_FA
 {
     public class SQLiteConnect
     {
-        string SQLiteIniPath = Application.StartupPath + @"\Config\SQLite.ini";
-        string FileDirectory = string.Empty;
-        string FolderDirectory = string.Empty;
-        string SQLiteFolderName = "SQLiteDB";
-        string ParentFolderName = DateTime.Now.ToString("yyyyMMdd-HHmmss");
-        string FileName = string.Empty;
+        string MssqlIniPath = Application.StartupPath + @"\Config\Mssql.ini";
         FileIniDataParser parser = new FileIniDataParser();
 
-        string[] TableCheck = { "TB_XRF_FA_DIRECT", "TB_XRF_HISTORY", "TB_XRF_SEQ_TEMP", "TB_XRF_AUTO_HISTORY" };
+        string DATABASEIP = string.Empty;
+        string DATABASE = string.Empty;
+        string USER = string.Empty;
+        string PASSWORD = string.Empty;
 
-        private SQLiteConnection _SQLiteCnn = new SQLiteConnection();
-        public SQLiteConnection SQLiteCnn
+        private SqlConnection _MssqlCnn = new SqlConnection();
+        public SqlConnection MssqlCnn
         {
             get
             {
-                if (_SQLiteCnn.State == ConnectionState.Closed)
+                if (_MssqlCnn.State == ConnectionState.Closed)
                 {
                     Open();
                 }
-                return _SQLiteCnn;
+                return _MssqlCnn;
             }
         }
 
@@ -47,199 +43,33 @@ namespace XRF_FA
             }
         }
 
-        #region [ Init DB Structure ]
-        private void InitSqlTable()
-        {
-            Open();
-            string createTableQuery = @"
-            CREATE TABLE IF NOT EXISTS ""TB_XRF_AUTO_HISTORY"" (
-                ""XRFHSEQ"" INTEGER NULL,
-                ""SMPLNO"" INTEGER NULL,
-                ""TMBDIV"" INTEGER NULL,
-                ""ELEMENTNAME"" INTEGER NULL,
-                ""ELEMENTVALUE"" INTEGER NULL,
-                ""FBDIV"" INTEGER NULL,
-                ""WCDDIV"" INTEGER NULL,
-                ""XRFDATE"" INTEGER NULL,
-                ""EXNAME"" INTEGER NULL,
-                ""RESOURCEVALUE"" INTEGER NULL
-            );
-
-            CREATE TABLE IF NOT EXISTS ""TB_XRF_SEQ_TEMP""(
-                ""SMPLNO"" INTEGER NULL,
-                ""TMBDIV"" INTEGER NULL,
-                ""SUJI"" INTEGER NULL,
-                ""SMPLLENGTH"" INTEGER NULL,
-                ""EXNAME"" INTEGER NULL,
-                ""RECHECK"" INTEGER NULL
-            );
-
-            CREATE TABLE IF NOT EXISTS ""TB_XRF_FA_DIRECT""(
-                ""SMPLNO"" INTEGER NULL,
-                ""TMBDIV"" INTEGER NULL,
-                ""CARVENUMBER"" INTEGER NULL,
-                ""SMPLLENGTH"" INTEGER NULL,
-                ""SUJI"" INTEGER NULL,
-                ""PROCESSDIV"" INTEGER NULL,
-                ""LOADER"" INTEGER NULL,
-                ""LOADER_DATE"" INTEGER NULL
-            );
-
-            CREATE TABLE IF NOT EXISTS ""TB_XRF_HISTORY""(
-                ""XRFHSEQ"" INTEGER NULL,
-                ""SMPLNO"" INTEGER NULL,
-                ""TMBDIV"" INTEGER NULL,
-                ""XRFFRONTW"" INTEGER NULL,
-                ""CRFRONTW"" INTEGER NULL,
-                ""EXT1FRONTW"" INTEGER NULL,
-                ""FEFRONTW"" INTEGER NULL
-            );";
-            ExecuteNonQuery(createTableQuery);
-        }
-        #endregion
-
-        #region [ Close Current DB and Create New ]
-        public void CreateNewDb()
-        {
-            IniData data = parser.ReadFile(SQLiteIniPath);
-            DbFilenameDialog dbFilenameDialog = new DbFilenameDialog(data["CONFIG"]["FILENAME"], "Cancel");
-            dbFilenameDialog.ShowDialog();
-            if (dbFilenameDialog.IsCancel == false)
-            {
-                FileName = $@"{dbFilenameDialog.Filename}";
-                dbFilenameDialog.Dispose();
-                ParentFolderName = DateTime.Now.ToString("yyyyMMdd-HHmmss");
-                FileDirectory = Path.Combine(FolderDirectory, SQLiteFolderName, ParentFolderName, FileName);
-                Directory.CreateDirectory(Path.Combine(FolderDirectory, SQLiteFolderName));
-                Directory.CreateDirectory(Path.Combine(FolderDirectory, SQLiteFolderName, ParentFolderName));
-                data["CONFIG"]["DIRECTORY"] = Path.Combine(FolderDirectory, SQLiteFolderName, ParentFolderName);
-                data["CONFIG"]["FILENAME"] = FileName;
-                parser.WriteFile(SQLiteIniPath, data);
-                Close();
-                InitSqlTable();
-            }
-        }
-        #endregion
-
         #region [ Check DB File & Structure ]
         public void CheckDB()
         {
-            IniData data = parser.ReadFile(SQLiteIniPath);
-            string InitDirectory = data["CONFIG"]["DIRECTORY"];
-            string InitFileName = data["CONFIG"]["FILENAME"];
-            FileDirectory = Path.Combine(InitDirectory, InitFileName);
-            if (!File.Exists(FileDirectory))
-            {
-                DialogResult dialog = MessageBox.Show("Database location is not found. Do you want to create new database?" +
-                    "\n[Yes]       : Create new database." +
-                    "\n[No]       : Select database file." +
-                    "\n[Cancel]: Exit program.", "디렉토리", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Error);
-                if (dialog == DialogResult.Yes)
-                {
-                    CreateAndInit();
-                }
-                else if (dialog == DialogResult.No)
-                {
-                    OpenFile();
-                }
-                else
-                {
-                    Application.Exit();
-                    Environment.Exit(0);
-                }
-            }
-            else
-            {
-                CheckStructure();
-            }
-        }
-        #endregion
+            IniData data = parser.ReadFile(MssqlIniPath);
+            DATABASEIP = data["CONFIG"]["DATABASEIP"];
+            DATABASE = data["CONFIG"]["DATABASEIP"];
+            USER = data["CONFIG"]["USER"];
+            PASSWORD = data["CONFIG"]["PASSWORD"];
+            bool CnnStatus = Open();
 
-        #region [ Create New File With Init structure ]
-        public void CreateAndInit()
-        {
-            IniData data = parser.ReadFile(SQLiteIniPath);
-            using (var fbd = new FolderBrowserDialog())
-            {
-                fbd.Description = "Where do you want to save database?";
-                DialogResult result = fbd.ShowDialog();
-
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-                {
-                    FolderDirectory = fbd.SelectedPath;
-                }
-            }
-            if (FolderDirectory.Length == 0)
-            {
-                Application.Exit();
-                Environment.Exit(0);
-            }
-            DbFilenameDialog dbFilenameDialog = new DbFilenameDialog(data["CONFIG"]["FILENAME"], "Exit");
-            dbFilenameDialog.ShowDialog();
-            FileName = $@"{dbFilenameDialog.Filename}";
-            dbFilenameDialog.Dispose();
-            ParentFolderName = DateTime.Now.ToString("yyyyMMdd-HHmmss");
-            FileDirectory = Path.Combine(FolderDirectory, SQLiteFolderName, ParentFolderName, FileName);
-            Directory.CreateDirectory(Path.Combine(FolderDirectory, SQLiteFolderName));
-            Directory.CreateDirectory(Path.Combine(FolderDirectory, SQLiteFolderName, ParentFolderName));
-            data["CONFIG"]["DIRECTORY"] = Path.Combine(FolderDirectory, SQLiteFolderName, ParentFolderName);
-            data["CONFIG"]["FILENAME"] = FileName;
-            parser.WriteFile(SQLiteIniPath, data);
-            InitSqlTable();
-        }
-        #endregion
-
-        #region [ Open DB File ]
-        private void OpenFile()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Database Files|*.db;*.sqlite;";
-            DialogResult result = openFileDialog.ShowDialog(); // Show the dialog.
-            if (result == DialogResult.OK) // Test result.
-            {
-                FileDirectory = openFileDialog.FileName;
-            }
-            else
-            {
-                Application.Exit();
-                Environment.Exit(0);
-            }
-            CheckStructure();
-        }
-        #endregion
-
-        #region [ Check DB File Structure ]
-        private void CheckStructure()
-        {
-            string query = "SELECT NAME FROM SQLITE_MASTER";
-            DataTable AvaiTable = ExecuteDataTable(query);
-            foreach (string item in TableCheck)
-            {
-                var list = AvaiTable.Rows.OfType<DataRow>().Select(dr => dr.Field<string>("name")).ToList();
-                if (!list.Contains(item))
-                {
-                    MessageBox.Show($@"Table {item} is not found in Database. You need to create a new database", "디렉토리", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Error);
-                    CreateAndInit();
-                    return;
-                }
-            }
-            IniData data = parser.ReadFile(SQLiteIniPath);
-            data["CONFIG"]["DIRECTORY"] = FileDirectory;
-            parser.WriteFile(SQLiteIniPath, data);
         }
         #endregion
 
         #region [ Open & Close Connection ]
-        public void Open()
+        public bool Open()
         {
-            _SQLiteCnn = new SQLiteConnection($@"Data Source={FileDirectory}; Version = 3;");
+            string cnn = $@"Data Source={DATABASEIP};Initial Catalog={DATABASE};Persist Security Info=True;User ID={USER};Password={PASSWORD}";
+            _MssqlCnn = new SqlConnection(cnn);
             try
             {
-                _SQLiteCnn.Open();
+                _MssqlCnn.Open();
+                return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "SqLite Error");
+                MessageBox.Show(ex.Message, "MSSQL Error");
+                return false;
             }
         }
 
@@ -247,7 +77,7 @@ namespace XRF_FA
         {
             try
             {
-                _SQLiteCnn.Close();
+                _MssqlCnn.Close();
             }
             catch
             {
@@ -265,13 +95,13 @@ namespace XRF_FA
         /// <returns></returns>
         public bool ExecuteNonQuery(string query)
         {
-            if (_SQLiteCnn.State == ConnectionState.Closed)
+            if (_MssqlCnn.State == ConnectionState.Closed)
             {
                 Open();
             }
             try
             {
-                SQLiteCommand command = _SQLiteCnn.CreateCommand();
+                SqlCommand command = _MssqlCnn.CreateCommand();
                 command.CommandText = query;
                 command.ExecuteNonQuery();
                 return true;
@@ -292,12 +122,13 @@ namespace XRF_FA
         /// <returns></returns>
         public DataTable ExecuteDataTable(string query)
         {
-            if (_SQLiteCnn.State == ConnectionState.Closed)
+            if (_MssqlCnn.State == ConnectionState.Closed)
             {
                 Open();
             }
-            SQLiteDataReader sqlite_datareader;
-            SQLiteCommand sqlite_cmd = _SQLiteCnn.CreateCommand();
+
+            SqlDataReader sqlite_datareader;
+            SqlCommand sqlite_cmd = _MssqlCnn.CreateCommand();
             sqlite_cmd.CommandText = query;
 
             sqlite_datareader = sqlite_cmd.ExecuteReader();
