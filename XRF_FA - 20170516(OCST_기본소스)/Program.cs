@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 
@@ -13,6 +12,8 @@ namespace XRF_FA
         [STAThread]
         static void Main()
         {
+            SQLiteConnect.Instance.CheckDB();
+
             bool flag = false;
             int ProgId = Process.GetCurrentProcess().Id;
             Process[] p = Process.GetProcessesByName("XRF_FA");

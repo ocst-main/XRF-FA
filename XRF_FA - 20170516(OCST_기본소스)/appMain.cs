@@ -1,27 +1,20 @@
-﻿using System;
+﻿using C1.Win.C1FlexGrid;
+using Ino.FrameWork;
+using opcNet.IF.SEM;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Collections.Specialized;
 using System.Data;
-using System.Data.OleDb;
+using System.Data.SQLite;
+using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Configuration;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
-using System.IO;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
-
-using opcNet.IF.SEM;
-using Innoit.FrameWork.Common;
-using System.Collections.Specialized;
-using C1.Win.C1FlexGrid;
-using Innoit.FrameWork.DataBase;
-using System.Collections.Concurrent;
-using Ino.FrameWork;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace XRF_FA
 {
@@ -43,7 +36,7 @@ namespace XRF_FA
         #endregion
 
         #region [ 멤버객체 및 변수 ]
-        private OleDbConnection dbConn = null;                      // Oracle 접속 객체
+        private SQLiteConnection dbConn = null;                      // Oracle 접속 객체
         public static bool ConnectFlag = false;                     // UAI 접속 상태
         private bool m_bFirstTest = true;							// 시험의 처음실행 체크 변수
         private opcMgrClass m_opcMgr = null;                        // OPC 관련 객체
@@ -98,7 +91,7 @@ namespace XRF_FA
         public int nIncNum = 0;
         public string sWorkingSMLName = string.Empty;                                           // 명령을 수행하는 시편의 이름
 
-        public bool[] bAStatus_X2 = new bool[15] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+        public bool[] bAStatus_X2 = new bool[15] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 
         const int nBufferNumber = 132;
 
@@ -129,7 +122,7 @@ namespace XRF_FA
                 this.nBufferIndex = nBufferIndex;
             }
         }
-        public sSML_STATUS[] mysSML_STATUS = new sSML_STATUS[3] { 
+        public sSML_STATUS[] mysSML_STATUS = new sSML_STATUS[3] {
             new sSML_STATUS(string.Empty, string.Empty, 0),
             new sSML_STATUS(string.Empty, string.Empty, 0),
             new sSML_STATUS(string.Empty, string.Empty, 0)
@@ -158,8 +151,7 @@ namespace XRF_FA
 
             #region [ Oracle DataBase 접속 ]
             // DataBase ConnectionString Loading
-            OraDataHelper.gConnString = Decrypted.Decrypt(System.Configuration.ConfigurationManager.ConnectionStrings["HMTS2"].ToString());
-            dbConn = new OleDbConnection(OraDataHelper.gConnString);
+            dbConn = SQLiteConnect.Instance.SQLiteCnn;
             if (dbConn == null)
             {
                 MessageBox.Show("Database연결에 실패하였습니다.\r\n프로그램을 종료합니다.", "Database 접속 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -277,10 +269,10 @@ namespace XRF_FA
             timer_X2.Interval = 2000;
             timer_X2.Elapsed += new System.Timers.ElapsedEventHandler(timer_X2_Elapsed);  //주기마다 실행되는 이벤트 등록
 
-            #if TEST
+#if TEST
                 this.Text += " [" + "Test Version" + "]";
                 MessageBox.Show("프로그램이 TEST MODE로 실행중입니다.", "알림", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            #endif
+#endif
             ////////////////////////////////////////////////////////////////////////////////////////
         }
         #endregion
@@ -346,16 +338,16 @@ namespace XRF_FA
             m_dtOrderList = dtTemp;
 
             for (int iRow = 0; iRow < m_dtOrderList.Rows.Count; iRow++)
-            { 
+            {
                 grdNo.Rows.Count += 1;
                 grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["SEQ"].Index, m_dtOrderList.Rows[iRow]["SEQ"]);
                 grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["시편번호"].Index, m_dtOrderList.Rows[iRow]["시편번호"]);
                 grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["TMB"].Index, m_dtOrderList.Rows[iRow]["TMB"]);
                 grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["길이"].Index, m_dtOrderList.Rows[iRow]["길이"]);
                 grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["취소"].Index, m_dtOrderList.Rows[iRow]["취소"]);
-                grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["세척유무"].Index, m_dtOrderList.Rows[iRow]["세척유무"]); 
-                grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["DivType"].Index, m_dtOrderList.Rows[iRow]["DivType"]); 
-                grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["시험기"].Index, m_dtOrderList.Rows[iRow]["시험기"]); 
+                grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["세척유무"].Index, m_dtOrderList.Rows[iRow]["세척유무"]);
+                grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["DivType"].Index, m_dtOrderList.Rows[iRow]["DivType"]);
+                grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["시험기"].Index, m_dtOrderList.Rows[iRow]["시험기"]);
                 grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["Application"].Index, m_dtOrderList.Rows[iRow]["Application"]);
             }
             #endregion
@@ -512,7 +504,7 @@ namespace XRF_FA
         #region [ X2 버퍼조정 클릭(btnSendBufCountX2_Click) ]
         private void btnSendBufCountX2_Click(object sender, EventArgs e)
         {
-            object[] oWriteData = new object[] { tbX2BufInput.Text, tbX2BufOutput.Text};
+            object[] oWriteData = new object[] { tbX2BufInput.Text, tbX2BufOutput.Text };
             int[] iTagHandle = new int[] { 18, 19 };
 
             string sGroupName = "XRF_CONV_LOC";
@@ -574,7 +566,7 @@ namespace XRF_FA
             try
             {
                 bool bOrderListDupCheck = false;
-                OleDbDataReader reader = CommonDataBase.GetOrderList(dbConn);
+                SQLiteDataReader reader = CommonDataBase.GetOrderList(dbConn);
                 if (reader != null)
                 {
                     if (reader.HasRows)
@@ -1213,12 +1205,12 @@ namespace XRF_FA
                 // 사용자 임의 변경에 따른 체크로직 없앰
                 //if (CommonDataBase.CheckAppName(strParams))
                 //{//시편번호에 맞는 검량선명이 있다면
-                    strParams = new string[] {//cmbAppName.Text
+                strParams = new string[] {//cmbAppName.Text
                                               txtAppName.Text
                                              ,strSMPLNO
                                              ,strTmbdiv
                                              };
-                    CommonDataBase.UpdateAppName(strParams);//기존 검량선명 수정
+                CommonDataBase.UpdateAppName(strParams);//기존 검량선명 수정
                 //}
                 //else
                 //{
@@ -1233,13 +1225,13 @@ namespace XRF_FA
             //조회 호출
             btOrder.PerformClick();
         }
-        
+
         #endregion
         #region [ 검량선명 변경시 숫자 입력텍스트(txtStart_KeyPress) ]
         private void txtStart_KeyPress(object sender, KeyPressEventArgs e)
         {
             //숫자만 입력되도록 필터링
-            if(!(char.IsDigit(e.KeyChar) || e.KeyChar == Convert.ToChar(Keys.Back)))    //숫자와 백스페이스를 제외한 나머지를 바로 처리
+            if (!(char.IsDigit(e.KeyChar) || e.KeyChar == Convert.ToChar(Keys.Back)))    //숫자와 백스페이스를 제외한 나머지를 바로 처리
             {
                 e.Handled = true;
             }
@@ -1446,7 +1438,7 @@ namespace XRF_FA
 
             try
             {
-                OleDbDataReader reader = CommonDataBase.GetOrderList(dbConn);
+                SQLiteDataReader reader = CommonDataBase.GetOrderList(dbConn);
                 if (reader != null)
                 {
                     if (reader.HasRows)
@@ -1508,9 +1500,10 @@ namespace XRF_FA
         public DataTable RequestTestList()
         {
             DataTable dtDivType = new DataTable();
-            OleDbCommand command = null;
-            OleDbDataReader reader = null;
-            OleDbConnection dbCon = new OleDbConnection(OraDataHelper.gConnString);
+            SQLiteCommand command = null;
+            SQLiteDataReader reader = null;
+            //OleDbConnection dbCon = new OleDbConnection(OraDataHelper.gConnString);
+            SQLiteConnection dbCon = SQLiteConnect.Instance.SQLiteCnn;
 
             dtDivType.Columns.Add("CODEVALUE");
             dtDivType.Columns.Add("CODENAME");
@@ -3706,7 +3699,7 @@ namespace XRF_FA
 
                                     //if (XRF_COMMAND.XRF_AUTO)   // 자동 모드일때만
                                     //{
-                                   XRF_Received_Data_Analyze(sRecevData);
+                                    XRF_Received_Data_Analyze(sRecevData);
                                     //}
 
                                     StateObject.Send_MSG = true;
@@ -3723,12 +3716,12 @@ namespace XRF_FA
         }
 
         // for BRUKER
-        List<string> lstCommand = new List<string>(); 
+        List<string> lstCommand = new List<string>();
         private void XRF_Receve_Data_X2(string response)
         {
             string sStatus = string.Empty;
             int nRStatusNum = -1; // Reply Status Number
-            if(!response.Contains("STATUS"))
+            if (!response.Contains("STATUS"))
                 setText(lstUAIMessage2, "<--" + response);
             #region [READRS]
             if (response.Contains("READRS"))
@@ -3745,8 +3738,8 @@ namespace XRF_FA
 
                         ///////////// 2017.04.29 김정건 ///////////////////////////////////////////////////
                         //ApplicationName의 원소테이블
-                        
-                        
+
+
 
                         string strSmplno = TestResult.Instance.SampleNumber;
                         string strTmbdiv = TestResult.Instance.TMBDiv;//.sTmb;
@@ -3830,7 +3823,7 @@ namespace XRF_FA
                                 dtElement.Rows[iElementRow]["ELEMENTVALUE"] = string.Empty;
                             }
                         }
-                        
+
                         //////////////////////////////////////////////////////////////////////////////////
                         string[] iData = new string[9];
                         iData[0] = TestResult.Instance.SampleNumber;// sSmplNo;
@@ -3899,7 +3892,7 @@ namespace XRF_FA
                 switch (Convert.ToInt32(strArrResponse[1]))
                 {
                     case 2: // Sample List
-                        iSmplnoCount = (strArrResponse.Length - 2) / 3;     
+                        iSmplnoCount = (strArrResponse.Length - 2) / 3;
 
                         // 전면투입허가 신호가 없을때
                         if (iSmplnoCount == 0 && !bAStatus_X2[3])
@@ -4231,7 +4224,7 @@ namespace XRF_FA
                                     setText(lbXRFCommStat, "Message 수신완료");
                                     lbXRFCommStat.BackColor = Color.LightGreen;
                                     XRF_SAMPLE_ADD();
-                                    
+
                                     XRF_COMMAND.XRF_TEMP_FLAG = false;
 
                                     setText(lstUAIMessage, "LIST START 결과 수신 -- " + sAnalyze[1].ToString());
@@ -4552,7 +4545,7 @@ namespace XRF_FA
                             drTemp["TMBDIV"] = sTmb;
                             drTemp["FRONTBACK"] = s_FB.Equals("F") ? "FRONT" : "BACK"; //전면이면
                         }
-                        
+
                     }
                 }
 
@@ -4590,7 +4583,7 @@ namespace XRF_FA
                 //            if (strMElement.Equals(dtElement.Rows[iElementRow]["ELEMENT"].ToString()))
                 //            {//기계에서 입력받은 원소 == DB에서 받아온 원소
                 //                bolElement = true;
-                                
+
                 //            }
                 //        }
 
@@ -5595,7 +5588,7 @@ namespace XRF_FA
                     ctrl.SelectedIndex = ctrl.Items.Count - 1;
                 }
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 WriteLogData(ex.Message, "List_Involk");
             }
@@ -5659,7 +5652,7 @@ namespace XRF_FA
             }
             catch { }
         }
-        
+
         delegate void Pic_Involk(PictureBox ctrl, int index);
         public void picChange(PictureBox ctrl, int index)
         {
@@ -5827,7 +5820,7 @@ namespace XRF_FA
         //    }
         //}
         #endregion
-        
+
         //{event for server's shotdown}
         private void OnOpcSvrDown(String sSvrName, String sNode, String sReason)
         {
@@ -5979,7 +5972,7 @@ namespace XRF_FA
             int[] iTagHandle = new int[1];
             iTagHandle[0] = 28;
 
-            Thread.Sleep(30);           
+            Thread.Sleep(30);
 
             int iResFunc = OPCFunction._OPC_Writes_Ascyn_Tags(m_opcMgr, "XRF_GROUP01", ref iTagHandle, ref oWriteData);
             if (iResFunc != 1)
@@ -6006,7 +5999,7 @@ namespace XRF_FA
             iTagHandle[0] = 29;
 
 
-            Thread.Sleep(30);           
+            Thread.Sleep(30);
 
             int iResFunc = OPCFunction._OPC_Writes_Ascyn_Tags(m_opcMgr, "XRF_GROUP01", ref iTagHandle, ref oWriteData);
             if (iResFunc != 1)
@@ -6033,7 +6026,7 @@ namespace XRF_FA
             iTagHandle[0] = 30;
 
 
-            Thread.Sleep(30);           
+            Thread.Sleep(30);
 
             int iResFunc = OPCFunction._OPC_Writes_Ascyn_Tags(m_opcMgr, "XRF_GROUP01", ref iTagHandle, ref oWriteData);
             if (iResFunc != 1)
@@ -6072,7 +6065,7 @@ namespace XRF_FA
                 PLCDefine.m_PlcFrontInEnable = true;
             }
         }
-        
+
         #endregion
 
         #region [ 버퍼 그리드 에디트 모드(grdBuffer_AfterEdit) ]
@@ -6145,7 +6138,7 @@ namespace XRF_FA
                     else
                     {
                         // 잘못된 데이터
-                        grdBuffer.SetData(grdBuffer.RowSel, grdBuffer.ColSel,string.Empty);
+                        grdBuffer.SetData(grdBuffer.RowSel, grdBuffer.ColSel, string.Empty);
                         return;
                     }
 
@@ -6180,7 +6173,7 @@ namespace XRF_FA
         {
             int iPos = -1;
             string[] strArrSPL = null;
-            switch(strDeviceCode)
+            switch (strDeviceCode)
             {
                 case "X1":
                     strArrSPL = new string[XrfControl.m_X1XrfBufferSize];
@@ -6195,7 +6188,7 @@ namespace XRF_FA
                     break;
             }
             iPos = Array.FindLastIndex(strArrSPL, element => !string.IsNullOrEmpty(element));
-            return iPos ;
+            return iPos;
         }
 
 
@@ -6220,7 +6213,8 @@ namespace XRF_FA
                         lblXrfApplication.Text = string.Empty;
                     }
                 }
-                catch {
+                catch
+                {
                     lblXrfApplication.Text = string.Empty;
                 }
             }
@@ -6232,7 +6226,7 @@ namespace XRF_FA
             if (tbApplicationName.Text.Length == 0 && string.IsNullOrEmpty(lblXrfApplication.Text))
             {
                 MessageBox.Show("시편을 분석할 프로그램명이 빠졌습니다!");
-                grdBuffer.Select(-1, -1); 
+                grdBuffer.Select(-1, -1);
                 return;
             }
         }
@@ -6297,7 +6291,7 @@ namespace XRF_FA
                     dr["TMB"] = grdNo.GetData(iRow, "TMB");
                     dr["길이"] = grdNo.GetDataDisplay(iRow, "길이");
                     dr["취소"] = grdNo.GetData(iRow, "취소") == null ? false : grdNo.GetData(iRow, "취소");
-                    dr["세척유무"] = grdNo.GetData(iRow, "세척유무") == null ? false : grdNo.GetData(iRow, "세척유무"); 
+                    dr["세척유무"] = grdNo.GetData(iRow, "세척유무") == null ? false : grdNo.GetData(iRow, "세척유무");
                     dr["DivType"] = grdNo.GetData(iRow, "DivType");
                     dr["시험기"] = grdNo.GetData(iRow, "시험기");
                     dr["Application"] = grdNo.GetDataDisplay(iRow, "Application");
@@ -6367,13 +6361,13 @@ namespace XRF_FA
                     break;
 
                 case 10: // 전면 투입 완료 신호가 왔을 때
-                    //if (bAStatus_X2[0])
-                    //{
-                        //Xrf_Front_in_EnableOff_X2();                        
-                        xcmd_X2 = new XRF_COMMAND();
-                        sCommand = xcmd_X2.XRF_BRUKER_MEASMP(m_TestList[m_TestList.Count - 1].sSPLNAME, m_TestList[m_TestList.Count - 1].sPROGRAMNAME);
-                        XRF_Send_MSG_X2(sCommand, true);
-                        MeasureMentHistoryLog("전면 시험명령보냄(XRF_BRUKER_MEASMP)", 2);
+                         //if (bAStatus_X2[0])
+                         //{
+                         //Xrf_Front_in_EnableOff_X2();                        
+                    xcmd_X2 = new XRF_COMMAND();
+                    sCommand = xcmd_X2.XRF_BRUKER_MEASMP(m_TestList[m_TestList.Count - 1].sSPLNAME, m_TestList[m_TestList.Count - 1].sPROGRAMNAME);
+                    XRF_Send_MSG_X2(sCommand, true);
+                    MeasureMentHistoryLog("전면 시험명령보냄(XRF_BRUKER_MEASMP)", 2);
                     //}
                     break;
 
@@ -6395,7 +6389,7 @@ namespace XRF_FA
                     aaa.nBufferIndex = m_TestList[0].nBufferIndex;
                     m_TestList.Add(aaa);
                     DisplaySmlinX2(m_TestList);
-                
+
                     // List Remove
                     m_TestList.RemoveAt(0);
                     DisplaySmlinX2(m_TestList);
@@ -6437,7 +6431,7 @@ namespace XRF_FA
             {
                 if (XrfControl.m_XrfBuffer[i] != null)   //시편 버퍼 데이타가 들어있는 Array for BRUKER
                 {
-                    bufCount++;   
+                    bufCount++;
                 }
             }
             return bufCount;
@@ -6496,7 +6490,7 @@ namespace XRF_FA
 
         // BRUKER XRF RESET
         private void btnX2Reset_Click(object sender, EventArgs e)
-        {           
+        {
             XRF_COMMAND xcmd_X2 = new XRF_COMMAND();
             string sCommand = xcmd_X2.XRF_BRUKER_RESET();
             XRF_Send_MSG_X2(sCommand, true);
@@ -6555,7 +6549,7 @@ namespace XRF_FA
         {
             try
             {
-                string sFilePath = sErrLog + DateTime.Now.ToString("yyyyMMdd_Err") +"appTemp"+ ".log";
+                string sFilePath = sErrLog + DateTime.Now.ToString("yyyyMMdd_Err") + "appTemp" + ".log";
                 TextWriter tw = null;
 
                 if (!Directory.Exists(sErrLog))
@@ -6580,6 +6574,21 @@ namespace XRF_FA
             {
                 txtAppName.Text = grdNo.GetDataDisplay(iRowSel, iColSel);
             }
+        }
+
+        private void 데이터베이스ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dialog = MessageBox.Show("Do you want to Close current DB and Create New", "Create New DB", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialog == DialogResult.Yes)
+            {
+                SQLiteConnect.Instance.CreateNewDb();
+                DbSize.Text = "1GB";
+            }
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            SQLiteConnect.Instance.Close();
         }
     }
 
