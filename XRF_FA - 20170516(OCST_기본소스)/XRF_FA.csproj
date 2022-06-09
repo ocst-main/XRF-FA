@@ -171,7 +171,7 @@
     <None Include="Config\ServerIp2.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Config\SQLite.ini">
+    <None Include="Config\Mssql.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Config\StartUp.ini">
