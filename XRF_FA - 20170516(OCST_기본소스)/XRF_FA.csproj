@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -15,8 +14,6 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -44,15 +41,6 @@
     <Reference Include="C1.Win.C1FlexGrid.2, Version=2.6.20122.701, Culture=neutral, PublicKeyToken=79882d576c6336da, processorArchitecture=MSIL" />
     <Reference Include="C1.Win.C1Input.2, Version=2.0.20122.33281, Culture=neutral, PublicKeyToken=7e7ff60f0c214f9a, processorArchitecture=MSIL" />
     <Reference Include="C1.Win.C1Win7Pack.2, Version=2.0.20122.19, Culture=neutral, PublicKeyToken=79882d576c6336da, processorArchitecture=MSIL" />
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>packages\EntityFramework.6.4.4\lib\net40\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>packages\EntityFramework.6.4.4\lib\net40\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
-      <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
-    </Reference>
     <Reference Include="Innoit.FrameWork.AsyncSocket">
       <HintPath>refDll\Innoit.FrameWork.AsyncSocket.dll</HintPath>
     </Reference>
@@ -74,18 +62,8 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.116.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.116.0\lib\net40\System.Data.SQLite.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.SQLite.EF6, Version=1.0.116.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>packages\System.Data.SQLite.EF6.1.0.116.0\lib\net40\System.Data.SQLite.EF6.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.116.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>packages\System.Data.SQLite.Linq.1.0.116.0\lib\net40\System.Data.SQLite.Linq.dll</HintPath>
-    </Reference>
     <Reference Include="System.Design" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
@@ -111,12 +89,6 @@
       <DependentUpon>appMain.cs</DependentUpon>
     </Compile>
     <Compile Include="CommonDataBase.cs" />
-    <Compile Include="DbFilenameDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DbFilenameDialog.Designer.cs">
-      <DependentUpon>DbFilenameDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="OPCFunction.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -131,7 +103,6 @@
     </Compile>
     <Compile Include="SocketClient.cs" />
     <Compile Include="Sql.cs" />
-    <Compile Include="SQLiteConnect.cs" />
     <Compile Include="TestResult.cs" />
     <Compile Include="XrfControl.cs" />
     <EmbeddedResource Include="AboutBox.resx">
@@ -140,9 +111,6 @@
     <EmbeddedResource Include="appMain.resx">
       <DependentUpon>appMain.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DbFilenameDialog.resx">
-      <DependentUpon>DbFilenameDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -159,34 +127,6 @@
       <DependentUpon>SignalInputForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="Config\Application.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Config\ServerIp.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Config\ServerIp2.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Config\SQLite.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Config\StartUp.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Config\XRF_Hysco.owx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Config\XRF_Hyscoold.owx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Help\HMTS2.CHM">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Help\HMTS2.CHM.bak">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -213,36 +153,6 @@
     <None Include="Resources\SignalEmpth.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Config\evMapDef.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Config\UsrAppConf - 0528 Org.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Config\UsrAppConf - 20161111 Org.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Config\UsrAppConf - 복사본.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Config\UsrAppConf.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Config\UsrAppConf_XGB.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Config\UsrAppConf프로그램분석용.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="DataInfo\BufferInfo.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="DataInfo\BufferInfo_BACK.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="DataInfo\OrderList.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <Content Include="Images\ABB_Enable_F.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -262,16 +172,6 @@
     <Content Include="Resources\XRF_FA.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
-    <Error Condition="!Exists('packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
-    <Error Condition="!Exists('packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.116.0\build\net40\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.116.0\build\net40\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
-  </Target>
-  <Import Project="packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
-  <Import Project="packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.116.0\build\net40\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.116.0\build\net40\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
