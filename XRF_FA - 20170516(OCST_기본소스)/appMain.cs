@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -36,7 +36,7 @@ namespace XRF_FA
         #endregion
 
         #region [ 멤버객체 및 변수 ]
-        private SQLiteConnection dbConn = null;                      // Oracle 접속 객체
+        private SqlConnection dbConn = null;                      // Oracle 접속 객체
         public static bool ConnectFlag = false;                     // UAI 접속 상태
         private bool m_bFirstTest = true;							// 시험의 처음실행 체크 변수
         private opcMgrClass m_opcMgr = null;                        // OPC 관련 객체
@@ -151,7 +151,7 @@ namespace XRF_FA
 
             #region [ Oracle DataBase 접속 ]
             // DataBase ConnectionString Loading
-            dbConn = SQLiteConnect.Instance.SQLiteCnn;
+            dbConn = MssqlConnect.Instance.MssqlCnn;
             if (dbConn == null)
             {
                 MessageBox.Show("Database연결에 실패하였습니다.\r\n프로그램을 종료합니다.", "Database 접속 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -566,7 +566,7 @@ namespace XRF_FA
             try
             {
                 bool bOrderListDupCheck = false;
-                SQLiteDataReader reader = CommonDataBase.GetOrderList(dbConn);
+                SqlDataReader reader = CommonDataBase.GetOrderList(dbConn);
                 if (reader != null)
                 {
                     if (reader.HasRows)
@@ -1438,7 +1438,7 @@ namespace XRF_FA
 
             try
             {
-                SQLiteDataReader reader = CommonDataBase.GetOrderList(dbConn);
+                SqlDataReader reader = CommonDataBase.GetOrderList(dbConn);
                 if (reader != null)
                 {
                     if (reader.HasRows)
@@ -1500,10 +1500,10 @@ namespace XRF_FA
         public DataTable RequestTestList()
         {
             DataTable dtDivType = new DataTable();
-            SQLiteCommand command = null;
-            SQLiteDataReader reader = null;
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             //OleDbConnection dbCon = new OleDbConnection(OraDataHelper.gConnString);
-            SQLiteConnection dbCon = SQLiteConnect.Instance.SQLiteCnn;
+            SqlConnection dbCon = MssqlConnect.Instance.MssqlCnn;
 
             dtDivType.Columns.Add("CODEVALUE");
             dtDivType.Columns.Add("CODENAME");
@@ -6578,17 +6578,17 @@ namespace XRF_FA
 
         private void 데이터베이스ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult dialog = MessageBox.Show("Do you want to Close current DB and Create New", "Create New DB", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialog == DialogResult.Yes)
-            {
-                SQLiteConnect.Instance.CreateNewDb();
-                DbSize.Text = "1GB";
-            }
+            //DialogResult dialog = MessageBox.Show("Do you want to Close current DB and Create New", "Create New DB", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            //if (dialog == DialogResult.Yes)
+            //{
+            //    MssqlConnect.Instance.CreateNewDb();
+            //    DbSize.Text = "1GB";
+            //}
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            SQLiteConnect.Instance.Close();
+            MssqlConnect.Instance.Close();
         }
     }
 

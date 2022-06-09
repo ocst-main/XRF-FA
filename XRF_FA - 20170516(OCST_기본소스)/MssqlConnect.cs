@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace XRF_FA
 {
-    public class SQLiteConnect
+    public class MssqlConnect
     {
         string MssqlIniPath = Application.StartupPath + @"\Config\Mssql.ini";
         FileIniDataParser parser = new FileIniDataParser();
@@ -30,14 +30,14 @@ namespace XRF_FA
             }
         }
 
-        private static SQLiteConnect _instance;
-        public static SQLiteConnect Instance
+        private static MssqlConnect _instance;
+        public static MssqlConnect Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new SQLiteConnect();
+                    _instance = new MssqlConnect();
                 }
                 return _instance;
             }
@@ -59,17 +59,29 @@ namespace XRF_FA
         #region [ Open & Close Connection ]
         public bool Open()
         {
-            string cnn = $@"Data Source={DATABASEIP};Initial Catalog={DATABASE};Persist Security Info=True;User ID={USER};Password={PASSWORD}";
-            _MssqlCnn = new SqlConnection(cnn);
-            try
+            if (_MssqlCnn.State == ConnectionState.Closed)
             {
-                _MssqlCnn.Open();
-                return true;
+                IniData data = parser.ReadFile(MssqlIniPath);
+                DATABASEIP = data["CONFIG"]["DATABASEIP"];
+                DATABASE = data["CONFIG"]["DATABASEIP"];
+                USER = data["CONFIG"]["USER"];
+                PASSWORD = data["CONFIG"]["PASSWORD"];
+                string cnn = $@"Data Source={DATABASEIP};Initial Catalog={DATABASE};Persist Security Info=True;User ID={USER};Password={PASSWORD}";
+                _MssqlCnn = new SqlConnection(cnn);
+                try
+                {
+                    _MssqlCnn.Open();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "MSSQL Error");
+                    return false;
+                }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message, "MSSQL Error");
-                return false;
+                return true;
             }
         }
 

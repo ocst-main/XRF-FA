@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.SqlClient;
+//using System.Data.SqlClient;
+//using System.Data.SQLite;
 using System.IO;
 using System.Text;
-//using System.Data.OleDb;
 using System.Windows.Forms;
 
 namespace XRF_FA
@@ -116,7 +117,7 @@ namespace XRF_FA
         /// <param name="sData"></param>
         /// <param name="iFlag"></param>
         /// <returns></returns>
-        public SQLiteDataReader Execute_BackGroundWorker(string[] sData, int iFlag)
+        public SqlDataReader Execute_BackGroundWorker(string[] sData, int iFlag)
         {
             switch (iFlag)
             {
@@ -161,12 +162,12 @@ namespace XRF_FA
 
         private bool Found_TB_XRF_SEQ(string smplNO, string tmbDiv)
         {
-            SQLiteCommand command = null;
+            SqlCommand command = null;
             object obj = null;
             bool bReturn = false;
             string sSql = string.Empty;
 
-            SQLiteConnection dbCon = SQLiteConnect.Instance.SQLiteCnn;
+            SqlConnection dbCon = MssqlConnect.Instance.MssqlCnn;
 
             sSql = string.Format("SELECT SMPLNO FROM TB_XRF_SEQ WHERE SMPLNO = '{0}' AND TMBDIV = '{1}'", smplNO, tmbDiv);
             try
@@ -217,10 +218,10 @@ namespace XRF_FA
             string sSmplNo = s[0].Trim();
             string sTmb = s[1].Trim();
 
-            SQLiteCommand command = null;
+            SqlCommand command = null;
             object oLen = null;
             string Sql = string.Empty;
-            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+            SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
 
             try
             {
@@ -265,12 +266,12 @@ namespace XRF_FA
         /// <summary>
         /// 시험지시(TB_XRF_SEQ) Table Data를 읽는다.
         /// </summary>
-        /// <returns>SQLiteDataReader</returns>
-        public static SQLiteDataReader GetOrderList(SQLiteConnection dbConn)
+        /// <returns>SqlDataReader</returns>
+        public static SqlDataReader GetOrderList(SqlConnection dbConn)
         {
 
-            SQLiteCommand command = null;
-            SQLiteDataReader reader = null;
+            SqlCommand command = null;
+            SqlDataReader reader = null;
 
             try
             {
@@ -304,12 +305,12 @@ namespace XRF_FA
         /// <summary>
         /// 시험방법을 읽는다.
         /// </summary>
-        /// <returns>SQLiteDataReader</returns>
-        public static DataTable GetDivTypeList(SQLiteConnection dbConn)
+        /// <returns>SqlDataReader</returns>
+        public static DataTable GetDivTypeList(SqlConnection dbConn)
         {
             DataTable dtDivType = new DataTable();
-            SQLiteCommand command = null;
-            SQLiteDataReader reader = null;
+            SqlCommand command = null;
+            SqlDataReader reader = null;
 
             try
             {
@@ -351,7 +352,7 @@ namespace XRF_FA
 
         private void upt_TB_XRF_SEQ(object sender, DoWorkEventArgs e)
         {
-            SQLiteCommand command = null;
+            SqlCommand command = null;
             int iReturn = 0;
             string sSql = string.Empty;
 
@@ -362,7 +363,7 @@ namespace XRF_FA
             string sRECHK = s[2];
             string sFlag = s[3];
 
-            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+            SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
 
             try
             {
@@ -425,7 +426,7 @@ namespace XRF_FA
             string sProc = s[6];
             string sDate = s[7];
 
-            SQLiteCommand command = null;
+            SqlCommand command = null;
             int iReturn = 0;
             string sSql = string.Empty;
             if (sLength.Length == 0)
@@ -433,7 +434,7 @@ namespace XRF_FA
                 sLength = "0";
             }
 
-            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+            SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
 
             if (!Found_TB_XRF_FA_DIRECT(sSmplNo, sTmbDiv, sCarve))
             {
@@ -477,9 +478,9 @@ namespace XRF_FA
             string sProc = s[4];
             string sDate = s[5];
 
-            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+            SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
 
-            SQLiteCommand command = null;
+            SqlCommand command = null;
             int iReturn = 0;
             string sComSql = string.Empty;
             try
@@ -564,9 +565,9 @@ namespace XRF_FA
             string Cr = s[6];
             string P = s[7];
 
-            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+            SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
 
-            SQLiteCommand command = null;
+            SqlCommand command = null;
             int iReturn = 0;
             string sSql = string.Empty;
 
@@ -650,9 +651,9 @@ namespace XRF_FA
             string sDate = s[8];
 
 
-            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+            SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
 
-            SQLiteCommand command = null;
+            SqlCommand command = null;
             int iReturn = 0;
             string sSql = string.Empty;
 
@@ -733,9 +734,9 @@ namespace XRF_FA
         /// <param name="sTmb"></param>
         /// <param name="tblName"></param>
         /// <returns></returns>
-        public static string GetProgramName(SQLiteConnection dbConn, string sSmplNo, string sTmb, string tblName)
+        public static string GetProgramName(SqlConnection dbConn, string sSmplNo, string sTmb, string tblName)
         {
-            SQLiteCommand command = null;
+            SqlCommand command = null;
             string sReturn = string.Empty;
             object obj = null;
 
@@ -788,9 +789,9 @@ namespace XRF_FA
         /// <param name="sExName"></param>
         /// <returns></returns>
         /// 
-        private static bool search_TB_XRF_SEQ_TEMP(SQLiteConnection dbConn, string sSmplNo, string sTmb)
+        private static bool search_TB_XRF_SEQ_TEMP(SqlConnection dbConn, string sSmplNo, string sTmb)
         {
-            SQLiteCommand command = null;
+            SqlCommand command = null;
             bool iReturn = false;
             string sSql = string.Empty;
             object obj = null;
@@ -835,9 +836,9 @@ namespace XRF_FA
             return iReturn;
         }
 
-        public static int insert_TB_XRF_SEQ_TEMP(SQLiteConnection dbConn, string sSmplNo, string sTmb, string sSUJI, string sLength, string sExName)
+        public static int insert_TB_XRF_SEQ_TEMP(SqlConnection dbConn, string sSmplNo, string sTmb, string sSUJI, string sLength, string sExName)
         {
-            SQLiteCommand command = null;
+            SqlCommand command = null;
             int iReturn = 0;
             string sSql = string.Empty;
 
@@ -883,11 +884,11 @@ namespace XRF_FA
 
         private bool Found_TB_XRF_FA_DIRECT(string sSmplNo, string sTmbDiv, string sCarve)
         {
-            SQLiteCommand command = null;
+            SqlCommand command = null;
             bool bReturn = true;
             object iCount = null;
 
-            SQLiteConnection dbCon = SQLiteConnect.Instance.SQLiteCnn;
+            SqlConnection dbCon = MssqlConnect.Instance.MssqlCnn;
             try
             {
 
@@ -933,9 +934,9 @@ namespace XRF_FA
 
             if (!Found_TB_TEST_DIRECT(sSmplNo, sTmbDiv)) return;
 
-            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+            SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
 
-            SQLiteCommand command = null;
+            SqlCommand command = null;
             int iReturn = 0;
             string sComSql = string.Empty;
 
@@ -968,12 +969,12 @@ namespace XRF_FA
 
         private bool Found_TB_TEST_DIRECT(string smplNO, string tmbDiv)
         {
-            SQLiteCommand command = null;
+            SqlCommand command = null;
             object obj = null;
             bool bReturn = false;
             string sSql = string.Empty;
 
-            SQLiteConnection dbCon = SQLiteConnect.Instance.SQLiteCnn;
+            SqlConnection dbCon = MssqlConnect.Instance.MssqlCnn;
 
             sSql = string.Format("SELECT SMPLNO FROM TB_TEST_DIRECT WHERE SMPLNO = '{0}' AND TMBDIV = '{1}'", smplNO, tmbDiv);
             try
@@ -1039,12 +1040,12 @@ namespace XRF_FA
         #region [ bool - 시편변호에 맞는 검량선(프로그램)명 있는지 반환(CheckAppName) ]
         public static bool CheckAppName(string[] sParams)
         {
-            SQLiteCommand command = null;
-            SQLiteDataReader reader = null;
+            SqlCommand command = null;
+            SqlDataReader reader = null;
 
             try
             {
-                SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+                SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
                 command = dbConn.CreateCommand();
                 string sql = string.Format(
                 " SELECT DIRECTR.APPNAME                                                                                    "
@@ -1134,8 +1135,8 @@ namespace XRF_FA
         #region [ 검량선(프로그램)명 변경(UpdateAppName) ]
         public static void UpdateAppName(string[] sParams)
         {
-            SQLiteCommand command = null;
-            SQLiteDataReader reader = null;
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             string sql = string.Format(
                 "UPDATE TB_XRF_SEQ "
                 + " SET EXNAME = '{0}' "
@@ -1148,7 +1149,7 @@ namespace XRF_FA
 
             try
             {
-                SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+                SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
                 command = dbConn.CreateCommand();
 
                 command.CommandText = sql;
@@ -1170,11 +1171,11 @@ namespace XRF_FA
         }
         #endregion
         #region [ DataTable - 검량선(프로그램)명 전체 가져온다(GetAppName) ]
-        public static DataTable GetAppName(SQLiteConnection dbConn)
+        public static DataTable GetAppName(SqlConnection dbConn)
         {
             DataTable dtAppName = new DataTable();
-            SQLiteCommand command = null;
-            SQLiteDataReader reader = null;
+            SqlCommand command = null;
+            SqlDataReader reader = null;
 
             try
             {
@@ -1215,12 +1216,12 @@ namespace XRF_FA
         #region [ DataTable - XRF Application Element 정보 조회(GetXRFApplicationElement) ]
         public static DataTable GetXRFApplicationElement(string[] sParams)
         {
-            SQLiteCommand command = null;
-            SQLiteDataReader reader = null;
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             DataTable dtTemp = new DataTable();
             try
             {
-                SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+                SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
                 command = dbConn.CreateCommand();
                 string sql = string.Format(
                 "SELECT DIRECTR.LINENAME"
@@ -1340,12 +1341,12 @@ namespace XRF_FA
         #region [ DataTable - XRF Application Detail 정보 조회() ]
         public static DataTable GetXRFApplicationDetail(string[] sParams)
         {
-            SQLiteCommand command = null;
-            SQLiteDataReader reader = null;
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             DataTable dtTemp = new DataTable();
             try
             {
-                SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+                SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
                 command = dbConn.CreateCommand();
                 string sql = string.Format(
                 "   SELECT *                          "
@@ -1453,9 +1454,9 @@ namespace XRF_FA
 
             DataTable dtElement = (DataTable)e.Argument;
             string SQL = string.Empty;
-            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+            SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
 
-            SQLiteCommand command = null;
+            SqlCommand command = null;
             #region [ 히스토리 저장 ]
             ////////////// 히스토리 저장 /////////////////////////////////////////////////////////////
             for (int iRow = 0; iRow < dtElement.Rows.Count; iRow++)
@@ -1732,9 +1733,9 @@ namespace XRF_FA
 
             //int iReturn = 0;
 
-            //SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+            //SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
 
-            //SQLiteCommand command = null;
+            //SqlCommand command = null;
             //string sSql = string.Empty;
 
             //if (wcd == "W" && fb == "F")
@@ -1805,9 +1806,9 @@ namespace XRF_FA
         public DataTable SelectXrfValue(DataTable dtElement)
         {
             List<string> list = new List<string>();
-            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
-            SQLiteCommand command = null;
-            SQLiteDataReader reader = null;
+            SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             DataTable dtTemp = new DataTable();
             StringBuilder strSql = new StringBuilder();
             DataTable dt = null;
@@ -1934,9 +1935,9 @@ namespace XRF_FA
             //string sDate = s[8];
 
 
-            SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+            SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
 
-            SQLiteCommand command = null;
+            SqlCommand command = null;
             int iReturn = 0;
             string sSql = string.Empty;
 
@@ -2011,7 +2012,7 @@ namespace XRF_FA
         //#region [ 결과 저장() ]
         //private void UpdateXRFSEQ(object sender, DoWorkEventArgs e)
         //{
-        //    SQLiteCommand command = null;
+        //    SqlCommand command = null;
         //    int iReturn = 0;
         //    string sSql = string.Empty;
 
@@ -2022,7 +2023,7 @@ namespace XRF_FA
         //    string sRECHK = s[2];
         //    string sFlag = s[3];
 
-        //    SQLiteConnection dbConn = SQLiteConnect.Instance.SQLiteCnn;
+        //    SqlConnection dbConn = MssqlConnect.Instance.MssqlCnn;
 
         //    try
         //    {

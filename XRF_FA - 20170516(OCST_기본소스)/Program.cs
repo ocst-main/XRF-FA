@@ -12,7 +12,7 @@ namespace XRF_FA
         [STAThread]
         static void Main()
         {
-            SQLiteConnect.Instance.CheckDB();
+            MssqlConnect.Instance.CheckDB();
 
             bool flag = false;
             int ProgId = Process.GetCurrentProcess().Id;
