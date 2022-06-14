@@ -1,4 +1,6 @@
 ﻿using C1.Win.C1FlexGrid;
+using IniParser;
+using IniParser.Model;
 using Ino.FrameWork;
 using opcNet.IF.SEM;
 using System;
@@ -20,6 +22,8 @@ namespace XRF_FA
 {
     public partial class MainForm : Form
     {
+        FileIniDataParser parser = new FileIniDataParser();
+
         #region [ API ]
         [DllImport("kernel32.dll")]
         private static extern int GetPrivateProfileString(    // GetIniValue 를 위해
@@ -180,7 +184,8 @@ namespace XRF_FA
             #region [ BRUKER Meas8m 접속 ]
             ////////////////////////////////////////////////////////////////////////////
             //// Remark for Coding 20160927 !
-            XrfControl.m_Xrf_IP_X2 = GetIniValue("SERVER_X2", "IP", sIniPath);
+            IniData data = parser.ReadFile(sIniPath);
+            XrfControl.m_Xrf_IP_X2 = data["SERVER_X2"]["IP"];
 
             IPAddress[] ipAddress_X2 = Dns.GetHostAddresses(XrfControl.m_Xrf_IP_X2);
             IPEndPoint remoteEP_X2 = new IPEndPoint(ipAddress_X2[0], 1904);
@@ -208,7 +213,7 @@ namespace XRF_FA
             #region [ Panalytical UAI 접속 ]
             ////////////////////////////////////////////////////////////////////////////////
             //// Remark for Coding 20160927 !
-            XrfControl.m_Xrf_IP = GetIniValue("SERVER_X1", "IP", sIniPath);
+            XrfControl.m_Xrf_IP = data["SERVER_X1"]["IP"];
 
             IPAddress[] ipAddress = Dns.GetHostAddresses(XrfControl.m_Xrf_IP);
             IPEndPoint remoteEP = new IPEndPoint(ipAddress[0], 701);
@@ -6574,16 +6579,6 @@ namespace XRF_FA
             {
                 txtAppName.Text = grdNo.GetDataDisplay(iRowSel, iColSel);
             }
-        }
-
-        private void 데이터베이스ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //DialogResult dialog = MessageBox.Show("Do you want to Close current DB and Create New", "Create New DB", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            //if (dialog == DialogResult.Yes)
-            //{
-            //    MssqlConnect.Instance.CreateNewDb();
-            //    DbSize.Text = "1GB";
-            //}
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)

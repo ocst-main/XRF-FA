@@ -9,8 +9,8 @@ namespace XRF_FA
 {
     public class MssqlConnect
     {
-        string MssqlIniPath = Application.StartupPath + @"\Config\Mssql.ini";
-        FileIniDataParser parser = new FileIniDataParser();
+        readonly string MssqlIniPath = Application.StartupPath + @"\Config\Mssql.ini";
+        readonly FileIniDataParser parser = new FileIniDataParser();
 
         string DATABASEIP = string.Empty;
         string DATABASE = string.Empty;
@@ -43,7 +43,7 @@ namespace XRF_FA
             }
         }
 
-        #region [ Check DB File & Structure ]
+        #region [ Check DB Connection ]
         public void CheckDB()
         {
             IniData data = parser.ReadFile(MssqlIniPath);
@@ -52,7 +52,20 @@ namespace XRF_FA
             USER = data["CONFIG"]["USER"];
             PASSWORD = data["CONFIG"]["PASSWORD"];
             bool CnnStatus = Open();
+            if (CnnStatus == false)
+            {
+                DialogResult dialogResult = MessageBox.Show("Can not connect to MSSQL Server. Please verify the connection in Mssql.ini file config.\n[OK] to skip MSSQL.\n[CANCEL] to exit program.", "MSSQL Connection", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if (dialogResult == DialogResult.OK)
+                {
 
+                }
+                else if (dialogResult == DialogResult.Cancel)
+                {
+                    Application.Exit();
+                    Environment.Exit(1);
+                }
+
+            }
         }
         #endregion
 
@@ -63,7 +76,7 @@ namespace XRF_FA
             {
                 IniData data = parser.ReadFile(MssqlIniPath);
                 DATABASEIP = data["CONFIG"]["DATABASEIP"];
-                DATABASE = data["CONFIG"]["DATABASEIP"];
+                DATABASE = data["CONFIG"]["DATABASE"];
                 USER = data["CONFIG"]["USER"];
                 PASSWORD = data["CONFIG"]["PASSWORD"];
                 string cnn = $@"Data Source={DATABASEIP};Initial Catalog={DATABASE};Persist Security Info=True;User ID={USER};Password={PASSWORD}";
@@ -99,55 +112,5 @@ namespace XRF_FA
         }
         #endregion
 
-        #region [ ExecuteNonQuery ]
-        /// <summary>
-        /// Execute query command without get result
-        /// </summary>
-        /// <param name="query">string Query Command</param>
-        /// <returns></returns>
-        public bool ExecuteNonQuery(string query)
-        {
-            if (_MssqlCnn.State == ConnectionState.Closed)
-            {
-                Open();
-            }
-            try
-            {
-                SqlCommand command = _MssqlCnn.CreateCommand();
-                command.CommandText = query;
-                command.ExecuteNonQuery();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "SqLite Error");
-                return false;
-            }
-        }
-        #endregion
-
-        #region [ ExecuteDataTable ]
-        /// <summary>
-        /// Execute query and get DataTable result
-        /// </summary>
-        /// <param name="query"> Query command</param>
-        /// <returns></returns>
-        public DataTable ExecuteDataTable(string query)
-        {
-            if (_MssqlCnn.State == ConnectionState.Closed)
-            {
-                Open();
-            }
-
-            SqlDataReader sqlite_datareader;
-            SqlCommand sqlite_cmd = _MssqlCnn.CreateCommand();
-            sqlite_cmd.CommandText = query;
-
-            sqlite_datareader = sqlite_cmd.ExecuteReader();
-            DataTable dt = new DataTable();
-            dt.Load(sqlite_datareader);
-            return dt;
-        }
-        #endregion
     }
 }

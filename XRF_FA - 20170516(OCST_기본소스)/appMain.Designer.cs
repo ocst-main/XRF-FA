@@ -33,6 +33,7 @@
             this.StatusMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.labelTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.DbSize = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpFA = new System.Windows.Forms.TabPage();
@@ -413,7 +414,6 @@
             this.msMain = new System.Windows.Forms.MenuStrip();
             this.editEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pLC에정보쓰기ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.데이터베이스ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.systemSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpHToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -427,7 +427,6 @@
             this.mnLoc = new System.Windows.Forms.ToolStripMenuItem();
             this.mnBuf = new System.Windows.Forms.ToolStripMenuItem();
             this.btExit = new System.Windows.Forms.ToolStripButton();
-            this.DbSize = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -611,6 +610,11 @@
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
             this.toolStripStatusLabel.Size = new System.Drawing.Size(0, 17);
+            // 
+            // DbSize
+            // 
+            this.DbSize.Name = "DbSize";
+            this.DbSize.Size = new System.Drawing.Size(0, 17);
             // 
             // panel1
             // 
@@ -5045,8 +5049,7 @@
             // editEToolStripMenuItem
             // 
             this.editEToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.pLC에정보쓰기ToolStripMenuItem,
-            this.데이터베이스ToolStripMenuItem});
+            this.pLC에정보쓰기ToolStripMenuItem});
             this.editEToolStripMenuItem.Name = "editEToolStripMenuItem";
             this.editEToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
             this.editEToolStripMenuItem.Text = "Edit(&E)";
@@ -5057,13 +5060,6 @@
             this.pLC에정보쓰기ToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.pLC에정보쓰기ToolStripMenuItem.Text = "수동으로 PLC에 정보 쓰기";
             this.pLC에정보쓰기ToolStripMenuItem.Click += new System.EventHandler(this.pLC에정보쓰기ToolStripMenuItem_Click);
-            // 
-            // 데이터베이스ToolStripMenuItem
-            // 
-            this.데이터베이스ToolStripMenuItem.Name = "데이터베이스ToolStripMenuItem";
-            this.데이터베이스ToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.데이터베이스ToolStripMenuItem.Text = "데이터베이스 구성";
-            this.데이터베이스ToolStripMenuItem.Click += new System.EventHandler(this.데이터베이스ToolStripMenuItem_Click);
             // 
             // systemSToolStripMenuItem
             // 
@@ -5177,11 +5173,6 @@
             this.btExit.Text = "toolStripSplitButton1";
             this.btExit.ToolTipText = "프로그램 종료";
             this.btExit.Click += new System.EventHandler(this.tsmExit_Click);
-            // 
-            // DbSize
-            // 
-            this.DbSize.Name = "DbSize";
-            this.DbSize.Size = new System.Drawing.Size(0, 17);
             // 
             // MainForm
             // 
@@ -5771,7 +5762,6 @@
         private System.Windows.Forms.ComboBox cmbAppNameManual;
         private System.Windows.Forms.Label lblH;
         private System.Windows.Forms.TextBox txtAppName;
-        private System.Windows.Forms.ToolStripMenuItem 데이터베이스ToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel DbSize;
         //private DataSet1 dataSet1;
         //private System.Windows.Forms.BindingSource tBXRFSEQBindingSource;
