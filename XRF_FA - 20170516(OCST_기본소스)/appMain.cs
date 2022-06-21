@@ -625,6 +625,7 @@ namespace XRF_FA
                 {
                     MessageBox.Show("시험지시 내용이 없습니다.", "알림", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+                reader.Close();
             }
             catch (Exception ex)
             {

@@ -79,7 +79,7 @@ namespace XRF_FA
                 DATABASE = data["CONFIG"]["DATABASE"];
                 USER = data["CONFIG"]["USER"];
                 PASSWORD = data["CONFIG"]["PASSWORD"];
-                string cnn = $@"Data Source={DATABASEIP};Initial Catalog={DATABASE};Persist Security Info=True;User ID={USER};Password={PASSWORD}";
+                string cnn = $@"Data Source={DATABASEIP};Initial Catalog={DATABASE};Persist Security Info=True;User ID={USER};Password={PASSWORD};MultipleActiveResultSets=true;";
                 _MssqlCnn = new SqlConnection(cnn);
                 try
                 {
