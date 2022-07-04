@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
-using System.Windows.Forms;
-using System.Text;
 using System.IO;
+using System.Text;
+using System.Windows.Forms;
 
 namespace XRF_FA
 {
@@ -233,7 +232,7 @@ namespace XRF_FA
         /// <summary>
         /// 현재 List 버퍼에 있는 시편의 수량 (0 ~ 4 까지)
         /// </summary>
-        public static int m_XrfListBufferCount = 0; 
+        public static int m_XrfListBufferCount = 0;
         /// <summary>
         /// 현재 List 버퍼에 있는 시편중 측정기에 넣어야할 시편의 순서(1 ~ 4 까지)
         /// </summary>
@@ -251,7 +250,8 @@ namespace XRF_FA
             int FindIndex = -1;
             int iCount = -1;
             string sReminMSG = string.Empty;
-            try {
+            try
+            {
                 for (int i = 0; i < 100; i++)
                 {
                     FindIndex = sMessage.IndexOf("@", FindIndex + 1);
@@ -281,13 +281,13 @@ namespace XRF_FA
                     }
                     XRF_MSG[i] = sMessage.Substring(FindIndex + 1, iLen);
                 }
-                if(XRF_MSG.Length > 0) WriteLogData(XRF_MSG, "Receive Data");
+                if (XRF_MSG.Length > 0) WriteLogData(XRF_MSG, "Receive Data");
             }
             catch
             {
                 XRF_MSG = null;
             }
-            finally 
+            finally
             {
             }
             return XRF_MSG;

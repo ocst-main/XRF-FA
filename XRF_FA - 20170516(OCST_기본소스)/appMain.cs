@@ -3523,7 +3523,7 @@ namespace XRF_FA
                     //state.m_Response.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
 
                     response = Encoding.ASCII.GetString(state.buffer, 0, bytesRead);
-
+                    WriteLogData(response, "ReceiveCallback");
                     XRF_Receve_Data(response);
                     // 나머지 데이터를 가져온다.
                     client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
@@ -3570,11 +3570,9 @@ namespace XRF_FA
                 }
                 if (bytesRead > 0)
                 {
-
                     response_X2 = Encoding.ASCII.GetString(state.buffer, 0, bytesRead);
                     XRF_Receve_Data_X2(response_X2);
-
-
+                    WriteLogData(response, "ReceiveCallback_X2");
                 }
             }
             catch (Exception e)

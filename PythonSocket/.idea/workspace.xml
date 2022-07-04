@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4f1be687-6115-4ecf-b4bf-81bbc84e43db" name="Changes" comment="" />
+    <list default="true" id="4f1be687-6115-4ecf-b4bf-81bbc84e43db" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/XRF_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/XRF_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/XRF_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/XRF_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../XRF_FA - 20170516(OCST_기본소스)/Config/Mssql.ini" beforeDir="false" afterPath="$PROJECT_DIR$/../XRF_FA - 20170516(OCST_기본소스)/Config/Mssql.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../XRF_FA - 20170516(OCST_기본소스)/XrfControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../XRF_FA - 20170516(OCST_기본소스)/XrfControl.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../XRF_FA - 20170516(OCST_기본소스)/appMain.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../XRF_FA - 20170516(OCST_기본소스)/appMain.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../XRF_FA - 20170516(OCST_기본소스)/appMain.resx" beforeDir="false" afterPath="$PROJECT_DIR$/../XRF_FA - 20170516(OCST_기본소스)/appMain.resx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../XRF_FA - 20170516(OCST_기본소스)/bin/Debug/Config/Mssql.ini" beforeDir="false" afterPath="$PROJECT_DIR$/../XRF_FA - 20170516(OCST_기본소스)/bin/Debug/Config/Mssql.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../XRF_FA - 20170516(OCST_기본소스)/bin/Debug/XRF_FA.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../XRF_FA - 20170516(OCST_기본소스)/bin/Debug/XRF_FA.exe" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -85,5 +95,16 @@
       <updated>1655776009917</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
