@@ -3,6 +3,7 @@ using IniParser;
 using IniParser.Model;
 using Ino.FrameWork;
 using opcNet.IF.SEM;
+using Syncfusion.XlsIO;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -23,6 +24,8 @@ namespace XRF_FA
     public partial class MainForm : Form
     {
         FileIniDataParser parser = new FileIniDataParser();
+        private Dictionary<string, DataTable> dictCsvOrder = new Dictionary<string, DataTable>();
+        private List<DataTable> listCsvOrder = new List<DataTable>();
 
         #region [ API ]
         [DllImport("kernel32.dll")]
@@ -342,19 +345,19 @@ namespace XRF_FA
             dtTemp.ReadXml(m_strFilePath + m_strOrderListFileName);
             m_dtOrderList = dtTemp;
 
-            for (int iRow = 0; iRow < m_dtOrderList.Rows.Count; iRow++)
-            {
-                grdNo.Rows.Count += 1;
-                grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["SEQ"].Index, m_dtOrderList.Rows[iRow]["SEQ"]);
-                grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["시편번호"].Index, m_dtOrderList.Rows[iRow]["시편번호"]);
-                grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["TMB"].Index, m_dtOrderList.Rows[iRow]["TMB"]);
-                grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["길이"].Index, m_dtOrderList.Rows[iRow]["길이"]);
-                grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["취소"].Index, m_dtOrderList.Rows[iRow]["취소"]);
-                grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["세척유무"].Index, m_dtOrderList.Rows[iRow]["세척유무"]);
-                grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["DivType"].Index, m_dtOrderList.Rows[iRow]["DivType"]);
-                grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["시험기"].Index, m_dtOrderList.Rows[iRow]["시험기"]);
-                grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["Application"].Index, m_dtOrderList.Rows[iRow]["Application"]);
-            }
+            //for (int iRow = 0; iRow < m_dtOrderList.Rows.Count; iRow++)
+            //{
+            //    grdNo.Rows.Count += 1;
+            //    grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["SEQ"].Index, m_dtOrderList.Rows[iRow]["SEQ"]);
+            //    grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["시편번호"].Index, m_dtOrderList.Rows[iRow]["시편번호"]);
+            //    grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["TMB"].Index, m_dtOrderList.Rows[iRow]["TMB"]);
+            //    grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["길이"].Index, m_dtOrderList.Rows[iRow]["길이"]);
+            //    grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["취소"].Index, m_dtOrderList.Rows[iRow]["취소"]);
+            //    grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["세척유무"].Index, m_dtOrderList.Rows[iRow]["세척유무"]);
+            //    grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["DivType"].Index, m_dtOrderList.Rows[iRow]["DivType"]);
+            //    grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["시험기"].Index, m_dtOrderList.Rows[iRow]["시험기"]);
+            //    grdNo.SetData(grdNo.Rows.Count - 1, grdNo.Cols["Application"].Index, m_dtOrderList.Rows[iRow]["Application"]);
+            //}
             #endregion
         }
         #endregion
@@ -6281,34 +6284,34 @@ namespace XRF_FA
         #region [ 오더리스트 백업 테이블 ]
         private void OrderListUpdate()
         {
-            this.Invoke(new Action(() =>
-            {
-                m_dtOrderList.Clear();
-                DataRow dr;
-                // 버퍼 데이터 갱신
-                for (int iRow = grdNo.Rows.Fixed; iRow < grdNo.Rows.Count; iRow++)
-                {
-                    dr = m_dtOrderList.NewRow();
-                    dr["SEQ"] = grdNo.GetDataDisplay(iRow, "SEQ");
-                    dr["시편번호"] = grdNo.GetDataDisplay(iRow, "시편번호");
-                    dr["TMB"] = grdNo.GetData(iRow, "TMB");
-                    dr["길이"] = grdNo.GetDataDisplay(iRow, "길이");
-                    dr["취소"] = grdNo.GetData(iRow, "취소") == null ? false : grdNo.GetData(iRow, "취소");
-                    dr["세척유무"] = grdNo.GetData(iRow, "세척유무") == null ? false : grdNo.GetData(iRow, "세척유무");
-                    dr["DivType"] = grdNo.GetData(iRow, "DivType");
-                    dr["시험기"] = grdNo.GetData(iRow, "시험기");
-                    dr["Application"] = grdNo.GetDataDisplay(iRow, "Application");
-                    m_dtOrderList.Rows.Add(dr);
-                }
+            //this.Invoke(new Action(() =>
+            //{
+            //    m_dtOrderList.Clear();
+            //    DataRow dr;
+            //    // 버퍼 데이터 갱신
+            //    for (int iRow = grdNo.Rows.Fixed; iRow < grdNo.Rows.Count; iRow++)
+            //    {
+            //        dr = m_dtOrderList.NewRow();
+            //        dr["SEQ"] = grdNo.GetDataDisplay(iRow, "SEQ");
+            //        dr["시편번호"] = grdNo.GetDataDisplay(iRow, "시편번호");
+            //        dr["TMB"] = grdNo.GetData(iRow, "TMB");
+            //        dr["길이"] = grdNo.GetDataDisplay(iRow, "길이");
+            //        dr["취소"] = grdNo.GetData(iRow, "취소") == null ? false : grdNo.GetData(iRow, "취소");
+            //        dr["세척유무"] = grdNo.GetData(iRow, "세척유무") == null ? false : grdNo.GetData(iRow, "세척유무");
+            //        dr["DivType"] = grdNo.GetData(iRow, "DivType");
+            //        dr["시험기"] = grdNo.GetData(iRow, "시험기");
+            //        dr["Application"] = grdNo.GetDataDisplay(iRow, "Application");
+            //        m_dtOrderList.Rows.Add(dr);
+            //    }
 
-                // 파일 저장
-                DirectoryInfo di = new DirectoryInfo(m_strFilePath);
-                if (!di.Exists)
-                {
-                    di.Create();
-                }
-                m_dtOrderList.WriteXml(m_strFilePath + m_strOrderListFileName);
-            }));
+            //    // 파일 저장
+            //    DirectoryInfo di = new DirectoryInfo(m_strFilePath);
+            //    if (!di.Exists)
+            //    {
+            //        di.Create();
+            //    }
+            //    m_dtOrderList.WriteXml(m_strFilePath + m_strOrderListFileName);
+            //}));
         }
 
         private void InitOrderListDataTable()
@@ -6582,6 +6585,222 @@ namespace XRF_FA
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             MssqlConnect.Instance.Close();
+        }
+
+        private void excelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (ExcelEngine excelEngine = new ExcelEngine())
+            {
+                IApplication application = excelEngine.Excel;
+
+                application.DefaultVersion = ExcelVersion.Xlsx;
+
+                //Create a workbook
+                IWorkbook workbook = application.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+                worksheet.IsGridLinesVisible = false;
+
+                worksheet.Range["A1"].Text = "Sample Name";
+                worksheet.Range["A2"].Text = "Application";
+                worksheet.Range["A3"].Text = "Measurement time";
+                worksheet.Range["B1"].Text = "BBC6056-B-B-D";
+                worksheet.Range["B2"].Text = "VGL_GG_ZFP";
+                worksheet.Range["B3"].Text = "4/29/2022 3:48:48 PM";
+                worksheet.Range["B1:C1"].Merge();
+                worksheet.Range["B2:C2"].Merge();
+                worksheet.Range["B3:C3"].Merge();
+
+                worksheet.Range["A4"].Text = "Zn";
+                worksheet.Range["A5"].Text = "Ni";
+                worksheet.Range["A6"].Text = "P";
+                worksheet.Range["A7"].Text = "ZnKA";
+                worksheet.Range["A8"].Text = "ZnLA";
+                worksheet.Range["A9"].Text = "FeKA";
+                worksheet.Range["A10"].Text = "FeLA";
+                worksheet.Range["A11"].Text = "PKA";
+                worksheet.Range["A12"].Text = "NiKA";
+
+                worksheet.Range["B4"].Number = 51.6;
+                worksheet.Range["B5"].Number = 16436000.0;
+                worksheet.Range["B6"].Number = -8.1;
+                worksheet.Range["B7"].Number = 539.9666;
+                worksheet.Range["B8"].Number = 525.0509;
+                worksheet.Range["B10"].Number = 6.2311;
+                worksheet.Range["B11"].Number = 0.0939;
+                worksheet.Range["B12"].Number = 1.6136;
+
+                worksheet.Range["C4"].Text = "g/m2";
+                worksheet.Range["C5"].Text = "mg/m2";
+                worksheet.Range["C6"].Text = "mg/m2";
+                worksheet.Range["C7"].Text = "kcps";
+                worksheet.Range["C8"].Text = "kcps";
+                worksheet.Range["C9"].Text = "kcps";
+                worksheet.Range["C10"].Text = "kcps";
+                worksheet.Range["C11"].Text = "kcps";
+                worksheet.Range["C12"].Text = "kcps";
+                worksheet.AutofitColumn(1);
+                worksheet.AutofitColumn(2);
+                worksheet.AutofitColumn(3);
+                worksheet.Range["A1:C12"].CellStyle.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
+                worksheet.Range["A1:C12"].CellStyle.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
+                workbook.SaveAs("SOutput.xlsx");
+            }
+
+        }
+
+        private void loadCSVToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<string> colRequires = new List<string>() { "SMPLNO", "TMBDIV", "SUJI", "SMPLLENGTH", "EXNAME", "CLEANYN", "DIVTYPE", "ISDONE" };
+            if (m_bFlagStart)
+            {
+                MessageBox.Show("기기 가동중에는 지시정보를 불러올수 없습니다.", "알림", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            OpenFileDialog csvOpenFileDialog = new OpenFileDialog
+            {
+                Title = "Browse CSV Files",
+                DefaultExt = "csv",
+                Filter = "csv files (*.csv)|*.csv",
+                FilterIndex = 2,
+                RestoreDirectory = true,
+                ReadOnlyChecked = true,
+                ShowReadOnly = true,
+                Multiselect = true
+            };
+
+            if (csvOpenFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                CommonDataBase cDb = new CommonDataBase();
+                foreach (string filepath in csvOpenFileDialog.FileNames)
+                {
+                    string filename = Path.GetFileName(filepath);
+                    DataTable dtData = new DataTable();
+                    string[] rows = File.ReadAllLines(filepath);
+
+                    string[] rowValues = null;
+                    DataRow dr = dtData.NewRow();
+                    if (rows.Length > 0)
+                    {
+                        foreach (string colRequire in colRequires)
+                        {
+                            if (!rows[0].Contains(colRequire))
+                            {
+                                MessageBox.Show($"Column {colRequire} not exist in csv file.\n{filepath}", "알림", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                continue;
+                            }
+                        }
+                        foreach (string columnName in rows[0].Split(','))
+                        {
+                            dtData.Columns.Add(columnName);
+                        }
+                        rowValues = rows[1].Split(',');
+                        if (rowValues[9] == "T")
+                        {
+                            continue;
+                        }
+                        dr = dtData.NewRow();
+                        dr.ItemArray = rowValues;
+                        dtData.Rows.Add(dr);
+                        dictCsvOrder[filename] = dtData;
+                    }
+                }
+                int iRow = 1;
+                foreach (KeyValuePair<string, DataTable> entry in dictCsvOrder)
+                {
+                    // do something with entry.Value or entry.Key
+                    if (entry.Value.Rows.Count > 0)
+                    {
+                        string[] aData = null;
+                        foreach (DataRow item in entry.Value.Rows)
+                        {
+                            grdNo.Rows.Count = iRow + 1;
+                            grdNo.SetData(iRow, 0, iRow.ToString());
+                            grdNo.SetData(iRow, 1, item["SMPLNO"].ToString()); // 시편번호
+                            grdNo.SetData(iRow, 2, item["TMBDIV"].ToString()); // TMB
+                            grdNo.SetData(iRow, 3, item["SMPLLENGTH"].ToString()); // 길이
+                            grdNo.SetData(iRow, 4, false);
+                            grdNo.SetData(iRow, 6, item["SUJI"].ToString()); // 수지
+                            grdNo.SetData(iRow, 7, item["CLEANYN"].ToString()); // 세척유무
+                            grdNo.SetData(iRow, 8, item["DIVTYPE"].ToString()); // 시험 구분
+                            grdNo.SetData(iRow, 9, item["MTCHECK"].ToString()); // 시험기 구분
+                            grdNo.SetData(iRow, 12, item["EXNAME"].ToString().Replace("-", "_")); // NEW 프로그램
+                            iRow++;
+                        }
+
+                        //aData = new string[4];
+                        //aData[0] = "";
+                        //aData[1] = "";
+                        //aData[2] = "D";
+                        //aData[3] = "S";
+                        //cDb.Execute_BackGroundWorker(aData, 1);  // Data Load를 완료하면 Load한 모든 시편을 'D'로 변경한다.
+                        //Thread.Sleep(10);
+                    }
+                    else
+                    {
+                        MessageBox.Show("시험지시 내용이 없습니다.", "알림", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        grdNo.Rows.Count = grdNo.Rows.Fixed;
+                    }
+                }
+            }
+        }
+
+        private void exportCSVToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.IO.Directory.CreateDirectory("CSV Result");
+            foreach (KeyValuePair<string, DataTable> entry in dictCsvOrder)
+            {
+                using (ExcelEngine excelEngine = new ExcelEngine())
+                {
+                    IApplication application = excelEngine.Excel;
+                    application.DefaultVersion = ExcelVersion.Excel2013;
+                    IWorkbook workbook = application.Workbooks.Create(1);
+                    IWorksheet worksheet = workbook.Worksheets[0];
+                    //Import DataTable to the worksheet.
+                    worksheet.ImportDataTable(entry.Value, true, 1, 1);
+
+                    worksheet.Range["J2"].Text = "T";
+                    worksheet.Range["A5"].Text = "Sample Name";
+                    worksheet.Range["A6"].Text = "Application";
+                    worksheet.Range["A7"].Text = "Measurement time";
+                    worksheet.Range["B5"].Text = "BBC6056-B-B-D";
+                    worksheet.Range["B6"].Text = "VGL_GG_ZFP";
+                    worksheet.Range["B7"].Text = "4/29/2022 3:48:48 PM";
+                    worksheet.Range["B5:C5"].Merge();
+                    worksheet.Range["B6:C6"].Merge();
+                    worksheet.Range["B7:C7"].Merge();
+
+                    worksheet.Range["A8"].Text = "Zn";
+                    worksheet.Range["A9"].Text = "Ni";
+                    worksheet.Range["A10"].Text = "P";
+                    worksheet.Range["A11"].Text = "ZnKA";
+                    worksheet.Range["A12"].Text = "ZnLA";
+                    worksheet.Range["A13"].Text = "FeKA";
+                    worksheet.Range["A14"].Text = "FeLA";
+                    worksheet.Range["A15"].Text = "PKA";
+                    worksheet.Range["A16"].Text = "NiKA";
+
+                    worksheet.Range["B8"].Number = 51.6;
+                    worksheet.Range["B9"].Number = 16436000.0;
+                    worksheet.Range["B10"].Number = -8.1;
+                    worksheet.Range["B11"].Number = 539.9666;
+                    worksheet.Range["B12"].Number = 525.0509;
+                    worksheet.Range["B13"].Number = 6.2311;
+                    worksheet.Range["B14"].Number = 0.0939;
+                    worksheet.Range["B15"].Number = 1.6136;
+
+                    worksheet.Range["C8"].Text = "g/m2";
+                    worksheet.Range["C9"].Text = "mg/m2";
+                    worksheet.Range["C10"].Text = "mg/m2";
+                    worksheet.Range["C11"].Text = "kcps";
+                    worksheet.Range["C12"].Text = "kcps";
+                    worksheet.Range["C13"].Text = "kcps";
+                    worksheet.Range["C14"].Text = "kcps";
+                    worksheet.Range["C15"].Text = "kcps";
+                    worksheet.Range["C16"].Text = "kcps";
+
+                    worksheet.SaveAs(Path.Combine("CSV Result", entry.Key), ",");
+                }
+            }
         }
     }
 

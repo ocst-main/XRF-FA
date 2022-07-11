@@ -427,6 +427,9 @@
             this.mnLoc = new System.Windows.Forms.ToolStripMenuItem();
             this.mnBuf = new System.Windows.Forms.ToolStripMenuItem();
             this.btExit = new System.Windows.Forms.ToolStripButton();
+            this.excelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -5049,7 +5052,10 @@
             // editEToolStripMenuItem
             // 
             this.editEToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.pLC에정보쓰기ToolStripMenuItem});
+            this.pLC에정보쓰기ToolStripMenuItem,
+            this.excelToolStripMenuItem,
+            this.loadCSVToolStripMenuItem,
+            this.exportCSVToolStripMenuItem});
             this.editEToolStripMenuItem.Name = "editEToolStripMenuItem";
             this.editEToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
             this.editEToolStripMenuItem.Text = "Edit(&E)";
@@ -5173,6 +5179,27 @@
             this.btExit.Text = "toolStripSplitButton1";
             this.btExit.ToolTipText = "프로그램 종료";
             this.btExit.Click += new System.EventHandler(this.tsmExit_Click);
+            // 
+            // excelToolStripMenuItem
+            // 
+            this.excelToolStripMenuItem.Name = "excelToolStripMenuItem";
+            this.excelToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.excelToolStripMenuItem.Text = "Excel";
+            this.excelToolStripMenuItem.Click += new System.EventHandler(this.excelToolStripMenuItem_Click);
+            // 
+            // loadCSVToolStripMenuItem
+            // 
+            this.loadCSVToolStripMenuItem.Name = "loadCSVToolStripMenuItem";
+            this.loadCSVToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.loadCSVToolStripMenuItem.Text = "Load CSV";
+            this.loadCSVToolStripMenuItem.Click += new System.EventHandler(this.loadCSVToolStripMenuItem_Click);
+            // 
+            // exportCSVToolStripMenuItem
+            // 
+            this.exportCSVToolStripMenuItem.Name = "exportCSVToolStripMenuItem";
+            this.exportCSVToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.exportCSVToolStripMenuItem.Text = "Export CSV";
+            this.exportCSVToolStripMenuItem.Click += new System.EventHandler(this.exportCSVToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -5763,6 +5790,9 @@
         private System.Windows.Forms.Label lblH;
         private System.Windows.Forms.TextBox txtAppName;
         private System.Windows.Forms.ToolStripStatusLabel DbSize;
+        private System.Windows.Forms.ToolStripMenuItem excelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadCSVToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportCSVToolStripMenuItem;
         //private DataSet1 dataSet1;
         //private System.Windows.Forms.BindingSource tBXRFSEQBindingSource;
         //private DataSet1TableAdapters.TB_XRF_SEQTableAdapter tB_XRF_SEQTableAdapter;

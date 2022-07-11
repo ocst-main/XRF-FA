@@ -12,6 +12,7 @@ namespace XRF_FA
         [STAThread]
         static void Main()
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjczMzk1QDMyMzAyZTMyMmUzMGlNZTBLRWxyZWxmQmlsNkxxUG5pRlBlZ3BYUGhjNkppR01LV2tzZ0syL0k9");
             MssqlConnect.Instance.CheckDB();
 
             bool flag = false;

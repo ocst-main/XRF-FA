@@ -1,0 +1,16 @@
+﻿SMPLNO,TMBDIV,ORDSEQ,MTCHECK,SUJI,SMPLLENGTH,EXNAME,CLEANYN,DIVTYPE,ISDONE
+CUZ510,T,4,X1,NULL,1184,CGL_GG_ZF,N,WCD,T
+
+
+Sample Name,BBC6056-B-B-D,,,,,,,,
+Application,VGL_GG_ZFP,,,,,,,,
+Measurement time,4/29/2022 3:48:48 PM,,,,,,,,
+Zn,51.6,g/m2,,,,,,,
+Ni,16436000,mg/m2,,,,,,,
+P,-8.1,mg/m2,,,,,,,
+ZnKA,539.9666,kcps,,,,,,,
+ZnLA,525.0509,kcps,,,,,,,
+FeKA,6.2311,kcps,,,,,,,
+FeLA,0.0939,kcps,,,,,,,
+PKA,1.6136,kcps,,,,,,,
+NiKA,,kcps,,,,,,,
